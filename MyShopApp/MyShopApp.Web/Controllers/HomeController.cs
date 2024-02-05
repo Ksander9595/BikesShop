@@ -18,6 +18,10 @@ namespace MyShopApp.Web.Controllers
             orderService = serv;
         }
 
+        public IActionResult HomePage()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
             IEnumerable<MotocycleDTO> motocyclesDtos = orderService.GetMotocycles();
