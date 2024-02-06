@@ -1,14 +1,19 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.BLL.Service;
 using MyShopApp.DAL.EF;
+using MyShopApp.DAL.EF.Entities;
 using MyShopApp.DAL.Interfaces;
 using MyShopApp.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
+string? connectionUsersDb = builder.Configuration.GetConnectionString("ConnectionUsersDb");
+string? connectionAppDb = builder.Configuration.GetConnectionString("ConnectionAppDb");
+builder.Services.AddDbContext<ApplicationUserDbContext>(options => options.UseSqlServer(connectionUsersDb));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionAppDb));
+builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationUserDbContext>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUnitOfWork, EFUnitOfWorks>();
 
@@ -32,6 +37,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=HomePage}/{id?}");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
