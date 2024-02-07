@@ -6,7 +6,7 @@ namespace MyShopApp.Web.Models
     {
         [Required]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
         [Display(Name = "Year")]
@@ -15,12 +15,12 @@ namespace MyShopApp.Web.Models
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [Required]
         [Compare("Password", ErrorMessage = "Password mismatch")]
         [DataType(DataType.Password)]
         [Display(Name = "ConfirmPassword")]
-        public string ConfirmPassword { get; set;}
+        public string? ConfirmPassword { get; set;}
     }
 }

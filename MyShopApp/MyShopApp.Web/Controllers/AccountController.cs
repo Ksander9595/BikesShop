@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using MyShopApp.DAL.EF.Entities;
-using System.Reflection.Metadata.Ecma335;
 using MyShopApp.Web.Models;
 
 namespace MyShopApp.Web.Controllers
@@ -23,7 +22,7 @@ namespace MyShopApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };
 
@@ -31,7 +30,7 @@ namespace MyShopApp.Web.Controllers
                 if(result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("HomePage", "Home");
                 }
                 else
                 {
@@ -42,6 +41,55 @@ namespace MyShopApp.Web.Controllers
                 }
             }
             return View(model);
+        }
+        [HttpGet]
+        public IActionResult Login(string returnUrl = null)
+        {
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);//аутентификация 
+
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("HomePage", "Home");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Incorrect login and (or) password");
+                }    
+               
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("HomePage", "Home");
+        }        
+        public IActionResult UserPage()
+        {
+            return View(User);
+        }
+        public IActionResult UserList()
+        {
+            return View(_userManager.Users.ToList());
         }
     }
 }
