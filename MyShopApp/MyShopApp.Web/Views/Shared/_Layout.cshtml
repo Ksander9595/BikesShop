@@ -34,7 +34,7 @@
                 </form>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a asp-controller="Account" asp-action="UserPage" class="btn btn-secondary my-2 my-sm-0" role="button" aria-pressed="true">@User.Identity.Name</a>
+                    <a asp-controller="Users" asp-action="UserPage" class="btn btn-secondary my-2 my-sm-0" role="button" aria-pressed="true">@User.Identity.Name</a>
                 }
                 else
                 {

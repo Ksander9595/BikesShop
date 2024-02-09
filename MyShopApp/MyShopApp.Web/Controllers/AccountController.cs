@@ -82,11 +82,7 @@ namespace MyShopApp.Web.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("HomePage", "Home");
-        }        
-        public IActionResult UserPage()
-        {
-            return View(User);
-        }
+        }              
         public IActionResult UserList()
         {
             return View(_userManager.Users.ToList());

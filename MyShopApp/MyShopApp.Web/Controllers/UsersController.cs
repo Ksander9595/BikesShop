@@ -13,7 +13,10 @@ namespace MyShopApp.Web.Controllers
         {
             _userManager = userManager;
         }
-
+        public IActionResult UserPage()
+        {
+            return View(User);
+        }
         public IActionResult UserList() => View(_userManager.Users.ToList());
 
         public IActionResult Create() => View();
@@ -41,7 +44,7 @@ namespace MyShopApp.Web.Controllers
         }
         public async Task<IActionResult> Edit(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            User? user = await _userManager.FindByIdAsync(id);
             if(user == null)
             {
                 return NotFound();
@@ -49,13 +52,13 @@ namespace MyShopApp.Web.Controllers
             EditUserViewModel model = new EditUserViewModel { Id = user.Id, Email = user.Email, Year = user.Year };
             return View(model);
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByIdAsync(model.Id);
+                User? user = await _userManager.FindByIdAsync(model.Id);
                 if(user!=null)
                 {
                     user.Email = model.Email;
@@ -82,12 +85,57 @@ namespace MyShopApp.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            User? user = await _userManager.FindByIdAsync(id);
             if(user!=null)
             {
                 IdentityResult result = await _userManager.DeleteAsync(user);
             }
             return RedirectToAction("UserList");
+        }
+
+        public async Task<IActionResult> ChangePassword(string Id)
+        {
+            User? user = await _userManager.FindByIdAsync(Id);
+            if(user==null )
+            {
+                return NotFound();
+            }
+            ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Email };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User? user = await _userManager.FindByIdAsync(model.Id); 
+                if(user!=null) 
+                {
+                    var _passwordValidator = HttpContext.RequestServices.GetService(typeof(IPasswordValidator<User>)) as IPasswordValidator<User>;
+                    var _passwordHasher = HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
+
+                    IdentityResult? result = await _passwordValidator.ValidateAsync(_userManager, user, model.NewPassword);
+                    if(result.Succeeded)
+                    {
+                        user.PasswordHash = _passwordHasher.HashPassword(user, model.NewPassword);
+                        await _userManager.UpdateAsync(user);
+                        return RedirectToAction("UserList");
+                    }
+                    else
+                    {
+                        foreach(var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "User is not found");
+                }               
+            }
+            return View(model);
         }
     }
 }
