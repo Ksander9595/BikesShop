@@ -29,7 +29,7 @@ namespace MyShopApp.Web.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if(result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);
+                    await _signInManager.SignInAsync(user, false);//устанавливаются аутентификационные куки
                     return RedirectToAction("HomePage", "Home");
                 }
                 else
@@ -54,7 +54,7 @@ namespace MyShopApp.Web.Controllers
         {
             if(ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);//аутентификация 
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);//аутентификация пользователя
 
                 if (result.Succeeded)
                 {
@@ -80,7 +80,7 @@ namespace MyShopApp.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();//удаляет аутентификационные куки
             return RedirectToAction("HomePage", "Home");
         }              
         public IActionResult UserList()

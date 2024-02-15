@@ -26,8 +26,8 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };
-                var result = await _userManager.CreateAsync(user, model.Password);
+                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };               
+                var result = await _userManager.CreateAsync(user, model.Password);               
                 if(result.Succeeded)
                 {
                     return RedirectToAction("UserList");

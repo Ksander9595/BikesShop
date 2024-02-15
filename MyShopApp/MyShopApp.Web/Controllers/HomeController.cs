@@ -5,6 +5,8 @@ using MyShopApp.BLL.Infrastructure;
 using MyShopApp.BLL.DTO;
 using AutoMapper;
 using MyShopApp.Web.Models;
+using Microsoft.AspNetCore.Identity;
+using MyShopApp.DAL.EF.Entities;
 
 
 namespace MyShopApp.Web.Controllers
@@ -32,41 +34,48 @@ namespace MyShopApp.Web.Controllers
 
         public IActionResult MakeOrder(int? id)
         {
-            try
+            if (User.Identity.IsAuthenticated)
             {
-                MotocycleDTO motocycle = orderService.GetMotocycle(id);
-                var order = new OrderViewModel { MotocycleID = motocycle.Id };
+                try
+                {
+                    MotocycleDTO motocycle = orderService.GetMotocycle(id);
+                    var order = new OrderViewModel { MotocycleID = motocycle.Id };
 
-                return View(order);
+                    return View(order);
+                }
+                catch (ValidationException ex)
+                {
+                    return Content(ex.Message);
+
+                }
             }
-            catch (ValidationException ex)
+            else
             {
-                return Content(ex.Message);
-
+                return Content("<h2>Add to card need registration</h2>");
             }
         }
         [HttpPost]
         public IActionResult MakeOrder(OrderViewModel order)
-        {
-            try
-            {
-                var orderDto = new OrderDTO
+        {           
+                try
                 {
-                    MotocycleID = order.MotocycleID,
-                    FirstName = order.FirstName,
-                    SecondName = order.SecondName,
-                    PhoneNumber = order.PhoneNumber,
-                    Address = order.Address,
-                    Date = order.Date
-                };
-                orderService.MakeOrder(orderDto);
-                return Content("<h2>Your order successfully completed<h2>");
-            }
-            catch(ValidationException ex)
-            {
-                ModelState.AddModelError(ex.Property, ex.Message);
-            }
-            return View(order);
+                    var orderDto = new OrderDTO
+                    {
+                        MotocycleID = order.MotocycleID,
+                        FirstName = order.FirstName,
+                        SecondName = order.SecondName,
+                        PhoneNumber = order.PhoneNumber,
+                        Address = order.Address,
+                        Date = order.Date
+                    };
+                    orderService.MakeOrder(orderDto);
+                    return Content("<h2>Your order successfully completed<h2>");
+                }
+                catch (ValidationException ex)
+                {
+                    ModelState.AddModelError(ex.Property, ex.Message);
+                }
+                return View(order);           
         }
         protected override void Dispose(bool disposing)
         {

@@ -53,7 +53,7 @@ namespace MyShopApp.Web.Controllers
 
         public async Task<IActionResult> Edit(string userId)
         {
-            User? user = await _userManager.FindByIdAsync(userId);
+            User? user = await _userManager.FindByIdAsync(userId);           
             if(user!= null)
             {
                 var userRoles = await _userManager.GetRolesAsync(user);

@@ -20,5 +20,7 @@ namespace MyShopApp.DAL.EF.Entities
 
         public DateTime Date { get; set; }
 
+        //public string UserId { get; set; }
+        
     }
 }
