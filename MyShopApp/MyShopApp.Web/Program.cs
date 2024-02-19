@@ -9,12 +9,13 @@ using MyShopApp.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string? connectionUsersDb = builder.Configuration.GetConnectionString("ConnectionUsersDb");
+//string? connectionUsersDb = builder.Configuration.GetConnectionString("ConnectionUsersDb");
 string? connectionAppDb = builder.Configuration.GetConnectionString("ConnectionAppDb");
-builder.Services.AddDbContext<ApplicationUserDbContext>(options => options.UseSqlServer(connectionUsersDb));
+//builder.Services.AddDbContext<ApplicationUserDbContext>(options => options.UseSqlServer(connectionUsersDb));
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionAppDb));
-builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationUserDbContext>();
+builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUnitOfWork, EFUnitOfWorks>();
 
 builder.Services.AddRazorPages();

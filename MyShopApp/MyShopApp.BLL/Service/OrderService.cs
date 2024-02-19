@@ -2,7 +2,6 @@
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.DAL.EF.Entities;
 using MyShopApp.DAL.Interfaces;
-using MyShopApp.DAL.Repositories;
 using MyShopApp.BLL.Infrastructure;
 using MyShopApp.BLL.BusinessModel;
 using AutoMapper;
@@ -21,7 +20,7 @@ namespace MyShopApp.BLL.Service
         public void MakeOrder(OrderDTO orderDto)
         {
             Motocycle motocycle = Database.Motocycles.Get(orderDto.MotocycleID);
-
+           
             if (motocycle == null)
             {
                 throw new ValidationException("Motocycle not found", "");

@@ -1,4 +1,5 @@
 ﻿
+
 namespace MyShopApp.BLL.DTO
 {
     public class OrderDTO

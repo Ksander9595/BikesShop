@@ -5,8 +5,7 @@ using MyShopApp.BLL.Infrastructure;
 using MyShopApp.BLL.DTO;
 using AutoMapper;
 using MyShopApp.Web.Models;
-using Microsoft.AspNetCore.Identity;
-using MyShopApp.DAL.EF.Entities;
+
 
 
 namespace MyShopApp.Web.Controllers

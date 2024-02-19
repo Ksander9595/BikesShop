@@ -1,23 +1,25 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MyShopApp.DAL.EF.Entities;
+using MyShopApp.BLL.DTO;
+using MyShopApp.BLL.Interfaces;
+using MyShopApp.BLL.Service;
 using MyShopApp.Web.Models;
 
 namespace MyShopApp.Web.Controllers
 {
     public class UsersController : Controller
     {
-        UserManager<User> _userManager;
-
-        public UsersController(UserManager<User> userManager)
+        IUserService userService;
+        
+        public UsersController(UserService _userService)
         {
-            _userManager = userManager;
+            userService = _userService;
         }
         public IActionResult UserPage()
         {
             return View(User);
         }
-        public IActionResult UserList() => View(_userManager.Users.ToList());
+        public IActionResult UserList() => View(userService.GetUsers());
 
         public IActionResult Create() => View();
 
@@ -26,8 +28,8 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };               
-                var result = await _userManager.CreateAsync(user, model.Password);               
+                UserDTO user = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year };               
+                var result = await userService.Create(user);               
                 if(result.Succeeded)
                 {
                     return RedirectToAction("UserList");
@@ -44,12 +46,12 @@ namespace MyShopApp.Web.Controllers
         }
         public async Task<IActionResult> Edit(string id)
         {
-            User? user = await _userManager.FindByIdAsync(id);
-            if(user == null)
+            UserDTO userDTO = await userService.GetUser(id);
+            if(userDTO == null)
             {
                 return NotFound();
             }
-            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Email = user.Email, Year = user.Year };
+            EditUserViewModel model = new EditUserViewModel { Id = userDTO.Id, Email = userDTO.Email, Year = userDTO.Year };
             return View(model);
         }
         
@@ -58,14 +60,14 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User? user = await _userManager.FindByIdAsync(model.Id);
-                if(user!=null)
+                UserDTO? userDTO = await userService.GetUser(model.Id);
+                if(userDTO!=null)
                 {
-                    user.Email = model.Email;
-                    user.UserName = model.Email;
-                    user.Year = model.Year;
+                    userDTO.Email = model.Email;
+                    userDTO.Name = model.Email;
+                    userDTO.Year = model.Year;
 
-                    var result = await _userManager.UpdateAsync(user);
+                    var result = await userService.Update(userDTO);
                     if(result.Succeeded)
                     {
                         return RedirectToAction("UserList");
@@ -83,13 +85,9 @@ namespace MyShopApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            User? user = await _userManager.FindByIdAsync(id);
-            if(user!=null)
-            {
-                IdentityResult result = await _userManager.DeleteAsync(user);
-            }
+            var result = await userService.Delete(id);     
             return RedirectToAction("UserList");
         }
 
