@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-//using MyShopApp.DAL.EF.Entities;
+using MyShopApp.DAL.EF.Entities;
 using MyShopApp.Web.Models;
 
 namespace MyShopApp.Web.Controllers

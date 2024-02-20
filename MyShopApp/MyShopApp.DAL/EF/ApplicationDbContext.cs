@@ -16,6 +16,7 @@ namespace MyShopApp.DAL.EF
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Motocycle>().HasData(
                 new Motocycle {
                     Id = 1,

@@ -11,7 +11,7 @@ namespace MyShopApp.Web.Controllers
     {
         IUserService userService;
         
-        public UsersController(UserService _userService)
+        public UsersController(IUserService _userService)
         {
             userService = _userService;
         }
@@ -28,8 +28,8 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDTO user = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year };               
-                var result = await userService.Create(user);               
+                UserDTO userDTO = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year };               
+                var result = await userService.Create(userDTO, model.Password);               
                 if(result.Succeeded)
                 {
                     return RedirectToAction("UserList");
@@ -87,18 +87,18 @@ namespace MyShopApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await userService.Delete(id);     
+            var result = await userService.Delete(id); 
             return RedirectToAction("UserList");
         }
 
         public async Task<IActionResult> ChangePassword(string Id)
         {
-            User? user = await _userManager.FindByIdAsync(Id);
-            if(user==null )
+            UserDTO userDTO = await userService.GetUser(Id);
+            if(userDTO==null )
             {
                 return NotFound();
             }
-            ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Email };
+            ChangePasswordViewModel model = new ChangePasswordViewModel { Id = userDTO.Id, Email = userDTO.Email };
             return View(model);
         }
 
@@ -107,17 +107,12 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User? user = await _userManager.FindByIdAsync(model.Id); 
-                if(user!=null) 
+                UserDTO? userDTO = await userService.GetUser(model.Id); 
+                if(userDTO!=null)
                 {
-                    var _passwordValidator = HttpContext.RequestServices.GetService(typeof(IPasswordValidator<User>)) as IPasswordValidator<User>;
-                    var _passwordHasher = HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
-
-                    IdentityResult? result = await _passwordValidator.ValidateAsync(_userManager, user, model.NewPassword);
+                    var result = await userService.ChangePassword(userDTO, model.OldPassword, model.NewPassword);
                     if(result.Succeeded)
-                    {
-                        user.PasswordHash = _passwordHasher.HashPassword(user, model.NewPassword);
-                        await _userManager.UpdateAsync(user);
+                    {                        
                         return RedirectToAction("UserList");
                     }
                     else

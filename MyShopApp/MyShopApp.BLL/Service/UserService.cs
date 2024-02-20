@@ -3,6 +3,8 @@ using AutoMapper;
 using MyShopApp.BLL.DTO;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.DAL.EF.Entities;
+using System.Numerics;
+
 
 
 namespace MyShopApp.BLL.Service
@@ -28,14 +30,15 @@ namespace MyShopApp.BLL.Service
             };                       
         }      
         public IEnumerable<UserDTO> GetUsers()
-        {
-            var mapper = new MapperConfiguration(cfg=>cfg.CreateMap<User, UserDTO>()).CreateMapper();
+        {            
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<User, UserDTO>()).CreateMapper();
             return mapper.Map<IEnumerable<User>, List<UserDTO>>(userManager.Users);
+
         }
-        public async Task<IdentityResult> Create(UserDTO userDTO)
+        public async Task<IdentityResult> Create(UserDTO userDTO, string password)
         {
             User user = new User { Email = userDTO.Email, UserName = userDTO.Email, Year = userDTO.Year };
-            return await userManager.CreateAsync(user, userDTO.Password);
+            return await userManager.CreateAsync(user, password);
         }      
         public async Task<IdentityResult> Update(UserDTO userDTO)
         {
@@ -50,9 +53,19 @@ namespace MyShopApp.BLL.Service
         }
         public async Task<IdentityResult> Delete(string Id)
         {
-            User? user = await userManager.FindByIdAsync(Id);                       
-            return await userManager.DeleteAsync(user);
-            
+            User? user = await userManager.FindByIdAsync(Id);          
+            return await userManager.DeleteAsync(user);                             
         }
+        public async Task<IdentityResult> ChangePassword(UserDTO userDTO, string oldPass, string newPass)
+        {
+            User? user = await userManager.FindByIdAsync(userDTO.Id);
+            return await userManager.ChangePasswordAsync(user, oldPass, newPass);
+
+        }
+        public void Dispose()
+        {
+            userManager.Dispose();
+        }
+        
     }
 }
