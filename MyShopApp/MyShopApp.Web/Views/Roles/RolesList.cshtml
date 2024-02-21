@@ -1,13 +1,13 @@
-﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+﻿@model IEnumerable<MyShopApp.BLL.DTO.RoleDTO>
 
 <h4>Roles List</h4>
 <table class="table table-dark">
     @foreach (var role in Model)
     {
         <tr>
-            <td>@role.Name</td>
+            <td>@role.RoleName</td>
             <td>
-                <form asp-action="Delete" asp-controller="Roles" asp-route-id="@role.Id" method="post">
+                <form asp-action="Delete" asp-controller="Roles" asp-route-id="@role.RoleId" method="post">
                     <button type="submit" class="btn btn-sm btn-danger">
                         Delete
                     </button>

@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MyShopApp.BLL.DTO;
 using MyShopApp.BLL.Interfaces;
-using MyShopApp.BLL.Service;
 using MyShopApp.Web.Models;
 
 namespace MyShopApp.Web.Controllers
@@ -87,8 +85,19 @@ namespace MyShopApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await userService.Delete(id); 
-            return RedirectToAction("UserList");
+            var result = await userService.Delete(id);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("UserList");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return View();//?
         }
 
         public async Task<IActionResult> ChangePassword(string Id)

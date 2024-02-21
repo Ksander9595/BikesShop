@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
+using MyShopApp.BLL.DTO;
 
 namespace MyShopApp.Web.Models
 {
@@ -6,11 +7,11 @@ namespace MyShopApp.Web.Models
     {
         public string UserId { get; set; }
         public string UserEmail { get; set; }
-        public List<IdentityRole> AllRoles { get; set; }
+        public IEnumerable<RoleDTO> AllRoles { get; set; }
         public IList<string> UserRoles { get; set; }
         public ChangeRoleViewModel()
         {
-            AllRoles = new List<IdentityRole>();
+            AllRoles = new List<RoleDTO>();
             UserRoles = new List<string>(); 
         }
     }

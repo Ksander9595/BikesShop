@@ -12,7 +12,9 @@ namespace MyShopApp.BLL.Interfaces
         Task<IdentityResult> Update(UserDTO userDTO);
         IEnumerable<UserDTO> GetUsers();
         Task<UserDTO> GetUser(string Id);
+        Task<IList<string>> GetUserRoles(UserDTO userDTo);
         Task<IdentityResult> ChangePassword(UserDTO userDTO, string oldPassword, string newPassword);
-        void Dispose();
+        Task<IdentityResult> AddToRoles(UserDTO userDTO, IEnumerable<string> addedRoles);
+        Task<IdentityResult> RemoveFromRoles(UserDTO userDTO, IEnumerable<string> removeRoles);
     }
 }

@@ -82,10 +82,6 @@ namespace MyShopApp.Web.Controllers
         {
             await _signInManager.SignOutAsync();//удаляет аутентификационные куки
             return RedirectToAction("HomePage", "Home");
-        }              
-        public IActionResult UserList()
-        {
-            return View(_userManager.Users.ToList());
-        }
+        }                    
     }
 }

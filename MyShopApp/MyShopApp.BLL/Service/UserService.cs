@@ -3,7 +3,6 @@ using AutoMapper;
 using MyShopApp.BLL.DTO;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.DAL.EF.Entities;
-using System.Numerics;
 
 
 
@@ -62,10 +61,21 @@ namespace MyShopApp.BLL.Service
             return await userManager.ChangePasswordAsync(user, oldPass, newPass);
 
         }
-        public void Dispose()
+        public async Task<IList<string>> GetUserRoles(UserDTO userDTO)
         {
-            userManager.Dispose();
+            User? user = await userManager.FindByIdAsync(userDTO.Id);
+            return await userManager.GetRolesAsync(user);
         }
+        public async Task<IdentityResult> AddToRoles(UserDTO userDTO, IEnumerable<string> addedRoles)
+        {
+            User? user = await userManager.FindByIdAsync(userDTO.Id);
+            return await userManager.AddToRolesAsync(user, addedRoles);
+        }
+        public async Task<IdentityResult> RemoveFromRoles(UserDTO userDTO, IEnumerable<string> removeRoles)
+        {
+            User? user = await userManager.FindByIdAsync(userDTO.Id);
+            return await userManager.RemoveFromRolesAsync(user, removeRoles);
+        }     
         
     }
 }
