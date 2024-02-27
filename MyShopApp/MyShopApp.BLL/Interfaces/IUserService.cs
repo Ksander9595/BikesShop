@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using MyShopApp.BLL.DTO;
 
 namespace MyShopApp.BLL.Interfaces

@@ -17,6 +17,7 @@ builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Appl
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ISignInService, SignInService>();
 builder.Services.AddScoped<IUnitOfWork, EFUnitOfWorks>();
 
 builder.Services.AddRazorPages();

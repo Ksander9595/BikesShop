@@ -1,19 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using MyShopApp.DAL.EF.Entities;
 using MyShopApp.Web.Models;
+using MyShopApp.BLL.Interfaces;
+using MyShopApp.BLL.DTO;
 
 namespace MyShopApp.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        
+        IUserService userService;       
+        ISignInService signInService;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(IUserService _userService, ISignInService _signInService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            userService = _userService;
+            signInService = _signInService;
         }
 
         [HttpGet]
@@ -24,12 +26,12 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };
+                UserDTO? userDTO = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year };
 
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await userService.Create(userDTO, model.Password);
                 if(result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);//устанавливаются аутентификационные куки
+                    await signInService.SignIn(userDTO, false);//устанавливаются аутентификационные куки
                     return RedirectToAction("HomePage", "Home");
                 }
                 else
@@ -54,7 +56,9 @@ namespace MyShopApp.Web.Controllers
         {
             if(ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);//аутентификация пользователя
+                UserDTO? userDTO = new UserDTO { Email = model.Email, Password = model.Password };
+                bool RememberMe = model.RememberMe;
+                var result = await signInService.PasswordSignIn(userDTO, RememberMe, false);//аутентификация пользователя
 
                 if (result.Succeeded)
                 {
@@ -65,7 +69,7 @@ namespace MyShopApp.Web.Controllers
                     else
                     {
                         return RedirectToAction("HomePage", "Home");
-                    }
+                    }                   
                 }
                 else
                 {
@@ -80,7 +84,7 @@ namespace MyShopApp.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();//удаляет аутентификационные куки
+            await signInService.SignOutAsync();//удаляет аутентификационные куки
             return RedirectToAction("HomePage", "Home");
         }                    
     }

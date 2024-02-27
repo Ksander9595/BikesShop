@@ -1,29 +1,44 @@
 ﻿@model MyShopApp.Web.Models.RegisterViewModel
 
-<h4>New user registration</h4>
-<form method="post" asp-controller="Account" asp-action="Register">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div>
-        <label asp-for="Email"></label><br />
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+@{
+    Layout = "_LayoutAccount";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <table class="table table-responsive">
+            <form class="text-center" method="post" asp-controller="Account" asp-action="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h2>Sign up to Bikes Shop</h2>
+            <div>
+                <label asp-for="Email">Email adderss</label><br />
+                <input asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div>
+                <label asp-for="Year"></label><br />
+                <input asp-for="Year" />
+                <span asp-validation-for="Year"></span>
+            </div>
+            <div>
+            <label asp-for="Password"></label><br />
+            <input asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+            </div>
+            <div>
+            <label asp-for="ConfirmPassword"></label><br />
+            <input asp-for="ConfirmPassword" />
+            <span asp-validation-for="ConfirmPassword"></span>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-dark mb-2">Registration</button>
+            </div>
+            </form>
+            </table>
+        </div>
+        <div class="col-6">
+            <img src="/AccountPageImage/moto4.jpg" class="rounded" style="width: 900px; height: 900px" alt="">
+        </div>
     </div>
-    <div>
-        <label asp-for="Year"></label><br />
-        <input asp-for="Year" />
-        <span asp-validation-for="Year"></span>
-    </div>
-    <div>
-        <label asp-for="Password"></label><br />
-        <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <div>
-        <label asp-for="ConfirmPassword"></label><br />
-        <input asp-for="ConfirmPassword" />
-        <span asp-validation-for="ConfirmPassword"></span>
-    </div>
-    <div>
-        <input type="submit" value="Registration" />
-    </div>
-</form>
+</div>
