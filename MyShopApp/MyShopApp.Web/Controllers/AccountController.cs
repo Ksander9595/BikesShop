@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using MyShopApp.Web.Models;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.BLL.DTO;

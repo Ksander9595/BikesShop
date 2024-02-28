@@ -28,5 +28,10 @@ namespace MyShopApp.BLL.Service
         {
             await signInManager.SignOutAsync();
         }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

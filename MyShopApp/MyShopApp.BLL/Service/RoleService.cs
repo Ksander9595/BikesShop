@@ -49,6 +49,11 @@ namespace MyShopApp.BLL.Service
             IdentityRole role = await roleManager.FindByIdAsync(roleDTO.RoleId);
             return await roleManager.DeleteAsync(role);
         }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
     
     

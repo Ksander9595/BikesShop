@@ -4,7 +4,7 @@ using MyShopApp.BLL.Service;
 
 namespace MyShopApp.BLL.Interfaces
 {
-    public interface ISignInService
+    public interface ISignInService : IDisposable
     {
         Task SignIn(UserDTO userDTO, bool value);
         Task<SignInResult> PasswordSignIn(UserDTO userDTO, bool RememberMe, bool value);

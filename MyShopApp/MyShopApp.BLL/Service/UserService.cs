@@ -75,7 +75,11 @@ namespace MyShopApp.BLL.Service
         {
             User? user = await userManager.FindByIdAsync(userDTO.Id);
             return await userManager.RemoveFromRolesAsync(user, removeRoles);
-        }     
-        
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

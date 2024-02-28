@@ -3,7 +3,7 @@ using MyShopApp.BLL.DTO;
 
 namespace MyShopApp.BLL.Interfaces
 {
-    public interface IUserService
+    public interface IUserService : IDisposable
     {
         Task<IdentityResult> Delete(string Id);
         Task<IdentityResult> Create(UserDTO userDTO, string password);

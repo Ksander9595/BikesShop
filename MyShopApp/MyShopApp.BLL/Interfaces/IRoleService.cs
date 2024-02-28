@@ -3,7 +3,7 @@ using MyShopApp.BLL.DTO;
 
 namespace MyShopApp.BLL.Interfaces
 {
-    public interface IRoleService
+    public interface IRoleService : IDisposable
     {
         Task<RoleDTO> GetRole(string Id);
         IEnumerable<RoleDTO> GetRoles();
