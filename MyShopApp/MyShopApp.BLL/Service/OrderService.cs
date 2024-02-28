@@ -1,4 +1,5 @@
-﻿using MyShopApp.BLL.DTO;
+﻿
+using MyShopApp.BLL.DTO;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.DAL.EF.Entities;
 using MyShopApp.DAL.Interfaces;
@@ -9,7 +10,7 @@ using AutoMapper;
 
 namespace MyShopApp.BLL.Service
 {
-    public class OrderService : IOrderService
+    public class OrderService : IOrderService//async-await
     {
         IUnitOfWork Database;
 
@@ -19,7 +20,7 @@ namespace MyShopApp.BLL.Service
         }
         public void MakeOrder(OrderDTO orderDto)
         {
-            Motocycle motocycle = Database.Motocycles.Get(orderDto.MotocycleID);
+            Motocycle motocycle = Database.Motocycles.GetAsync(orderDto.MotocycleID);
            
             if (motocycle == null)
             {

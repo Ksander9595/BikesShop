@@ -1,4 +1,5 @@
-﻿using MyShopApp.DAL.EF;
+﻿using Microsoft.EntityFrameworkCore;
+using MyShopApp.DAL.EF;
 using MyShopApp.DAL.EF.Entities;
 using MyShopApp.DAL.Interfaces;
 
@@ -16,9 +17,9 @@ namespace MyShopApp.DAL.Repositories
         {
             return db.Motocycles;
         }
-        public Motocycle Get(int id)
+        public async Task<Motocycle> Get(int id)//
         {            
-            return db.Motocycles.FirstOrDefault(m => m.Id == id);
+            return await db.Motocycles.FirstOrDefaultAsync(m => m.Id == id);
         }
         public void Create(Motocycle motocycle)
         {
