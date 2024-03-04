@@ -5,43 +5,52 @@ using MyShopApp.DAL.Interfaces;
 
 namespace MyShopApp.DAL.Repositories
 {
-    public class OrderRepository : IRepository<Order>
+    public class OrderRepository : IRepository<Order>//??
     {
         private ApplicationDbContext db;
         public OrderRepository(ApplicationDbContext context)
         {
             db = context;
         }
-        public IEnumerable<Order> GetAll()
-        {
-            return db.Orders.Include(o=>o.motocycle);
+        public async Task<IEnumerable<Order>> GetAllAsync()
+        {            
+            var result = db.Orders.Include(o=>o.motorcycle);
+            await db.SaveChangesAsync();
+            return result;
         }
-        public Order Get(int id)
+        public async Task<Order> GetAsync(int id)
         {
-            return db.Orders.FirstOrDefault(o => o.OrderId == id);
+            var result = await db.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
+            await db.SaveChangesAsync();
+            return result;
         }
-        public void Create(Order order)
+        public async Task CreateAsync(Order order)
         {
-            db.Orders.Add(order);
+            await db.Orders.AddAsync(order);
+            await db.SaveChangesAsync();
         }
-        public void Update(Order order)
+        public async Task UpdateAsync(Order order)
         {
             db.Orders.Update(order);
+            await db.SaveChangesAsync();
         }
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             if (id != null)
             {
-                Order? order = db.Orders.FirstOrDefault(o => o.OrderId == id);
+                Order? order = await db.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
                 db.Orders.Remove(order);
             }
+            await db.SaveChangesAsync();
         }
-        public IEnumerable<Order> Find(Func<Order, Boolean> predicate)
+        public async Task<IEnumerable<Order>> FindAsync(Func<Order, Boolean> predicate)
         {
-            return db.Orders
-                .Include(o=>o.motocycle)
+            var result = db.Orders
+                .Include(o=>o.motorcycle)
                 .Where(predicate)
                 .ToList();
+            await db.SaveChangesAsync();
+            return result;
         }
     }
 }

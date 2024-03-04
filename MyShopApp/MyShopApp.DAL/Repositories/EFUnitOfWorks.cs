@@ -8,20 +8,20 @@ namespace MyShopApp.DAL.Repositories
     public class EFUnitOfWorks : IUnitOfWork
     {
         private ApplicationDbContext db;
-        private MotocycleRepository motocycleRepository;
+        private MotocycleRepository motorcycleRepository;
         private OrderRepository orderRepository;
 
         public EFUnitOfWorks(ApplicationDbContext context)
         {
             db = context;
         }
-        public IRepository<Motocycle> Motocycles
+        public IRepository<Motorcycle> Motorcycles
         {
             get 
             { 
-                if(motocycleRepository == null)
-                    motocycleRepository = new MotocycleRepository(db);
-                return  motocycleRepository;
+                if(motorcycleRepository == null)
+                    motorcycleRepository = new MotocycleRepository(db);
+                return  motorcycleRepository;
             }
         }
         public IRepository<Order> Orders
@@ -33,9 +33,9 @@ namespace MyShopApp.DAL.Repositories
                 return orderRepository;
             }
         }
-        public void Save()
+        public async Task SaveAsync()
         {
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
         private bool disposed = false;
 

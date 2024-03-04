@@ -20,18 +20,18 @@ namespace MyShopApp.BLL.Service
         }
         public void MakeOrder(OrderDTO orderDto)
         {
-            Motocycle motocycle = Database.Motocycles.GetAsync(orderDto.MotocycleID);
+            Motorcycle motorcycle = Database.Motorcycles.GetAsync(orderDto.MotocycleID);
            
-            if (motocycle == null)
+            if (motorcycle == null)
             {
                 throw new ValidationException("Motocycle not found", "");
             }
-            decimal sum = new Discount(0.1m).GetDiscountedPrice(motocycle.Price);
+            decimal sum = new Discount(0.1m).GetDiscountedPrice(motorcycle.Price);
             Order order = new Order
             {
                 Date = DateTime.Now,
                 Address = orderDto.Address,
-                MotocycleId = motocycle.Id,
+                MotocycleId = motorcycle.Id,
                 Sum = sum,
                 PhoneNumber = orderDto.PhoneNumber
             };
@@ -39,21 +39,21 @@ namespace MyShopApp.BLL.Service
             Database.Save();
         }
 
-        public IEnumerable<MotocycleDTO> GetMotocycles()
+        public IEnumerable<MotorcycleDTO> GetMotocycles()
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Motocycle, MotocycleDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Motocycle>, List<MotocycleDTO>>(Database.Motocycles.GetAll());
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Motorcycle, MotorcycleDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Motorcycle>, List<MotorcycleDTO>>(Database.Motorcycles.GetAll());
         }
 
-        public MotocycleDTO GetMotocycle(int? id)
+        public MotorcycleDTO GetMotocycle(int? id)
         {
             if (id == null)
                 throw new ValidationException("ID motocycle not found", "");
-            var motocycle = Database.Motocycles.Get(id.Value);
+            var motocycle = Database.Motorcycles.Get(id.Value);
             if (motocycle == null)
                 throw new ValidationException("Motocycle not found", "");
 
-            return new MotocycleDTO
+            return new MotorcycleDTO
             {
                 Name = motocycle.Name,
                 Model = motocycle.Model,

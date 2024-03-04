@@ -6,40 +6,51 @@ using MyShopApp.DAL.Interfaces;
 
 namespace MyShopApp.DAL.Repositories
 {
-    public class MotocycleRepository : IRepository<Motocycle>
+    public class MotocycleRepository : IRepository<Motorcycle>
     {
         private ApplicationDbContext db;
         public MotocycleRepository(ApplicationDbContext context) 
         {
             db = context;
         }
-        public IEnumerable<Motocycle> GetAll()
-        {
-            return db.Motocycles;
+        public async Task<IEnumerable<Motorcycle>> GetAllAsync()
+        {           
+            var result = db.Motorcycles;
+            await db.SaveChangesAsync();
+            return result;
         }
-        public async Task<Motocycle> Get(int id)//
+        public async Task<Motorcycle> GetAsync(int id)
+        {                
+            var result = await db.Motorcycles.FirstOrDefaultAsync(m => m.Id == id);     
+            await db.SaveChangesAsync();
+            return result;
+        }
+        public async Task CreateAsync(Motorcycle motorcycle)
+        {
+            await db.Motorcycles.AddAsync(motorcycle);
+            await db.SaveChangesAsync();
+        }
+        public async Task UpdateAsync(Motorcycle motorcycle)
+        {
+            db.Motorcycles.Update(motorcycle);
+            await db.SaveChangesAsync();
+        }
+        public async Task DeleteAsync(int id)
         {            
-            return await db.Motocycles.FirstOrDefaultAsync(m => m.Id == id);
-        }
-        public void Create(Motocycle motocycle)
-        {
-            db.Motocycles.Add(motocycle);
-        }
-        public void Update(Motocycle motocycle)
-        {
-            db.Motocycles.Update(motocycle);
-        }
-        public void Delete(int id)
-        {
-            if(id != null)
+            if(id!=null)
             {
-                Motocycle? motocycle = db.Motocycles.FirstOrDefault(m => m.Id == id);
-                db.Motocycles.Remove(motocycle);
-            }           
+                Motorcycle? motorcycle = await db.Motorcycles.FirstOrDefaultAsync(m => m.Id == id);
+                db.Motorcycles.Remove(motorcycle);
+            }
+            await db.SaveChangesAsync();
         }
-        public IEnumerable<Motocycle> Find(Func<Motocycle, Boolean> predicate)
+        public async Task<IEnumerable<Motorcycle>> FindAsync(Func<Motorcycle, Boolean> predicate)
         {
-            return db.Motocycles.Where(predicate).ToList();
+
+            var result = db.Motorcycles.Where(predicate).ToList();
+            await db.SaveChangesAsync();
+            return result;
+            
         }
 
 

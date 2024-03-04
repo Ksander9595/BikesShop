@@ -1,15 +1,19 @@
-﻿using MyShopApp.DAL.EF.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MyShopApp.BLL.DTO
+namespace MyShopApp.DAL.EF.Entities
 {
-    public class MotocycleDTO
+    public class Motorcycle
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Model { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public MotocycleClass motoClass { get; set; }
+        public MotorcycleClass motoClass { get; set; }
         public int Year { get; set; }
         public int Hp { get; set; }
         public int Capacity { get; set; }
@@ -18,5 +22,7 @@ namespace MyShopApp.BLL.DTO
         public string Color { get; set; }
         public bool Condition { get; set; }
         public bool Availability { get; set; }
+        public ICollection<Order> Orders { get; set; }
+
     }
 }

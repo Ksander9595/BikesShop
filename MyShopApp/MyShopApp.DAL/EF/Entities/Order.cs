@@ -15,8 +15,8 @@ namespace MyShopApp.DAL.EF.Entities
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
 
-        public Motocycle motocycle { get; set; }
-        public int MotocycleId { get; set; }
+        public Motorcycle motorcycle { get; set; }
+        public int MotorcycleId { get; set; }
 
         public DateTime Date { get; set; }
 

@@ -9,8 +9,8 @@ namespace MyShopApp.DAL.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Motocycle> Motocycles { get; }
+        IRepository<Motorcycle> Motorcycles { get; }
         IRepository<Order> Orders { get; }
-        void Save();
+        Task SaveAsync();
     }
 }

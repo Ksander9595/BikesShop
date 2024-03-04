@@ -9,7 +9,7 @@ namespace MyShopApp.Web.Models
         public string Model { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public MotocycleClass motoClass { get; set; }
+        public MotorcycleClass motoClass { get; set; }
         public int Year { get; set; }
         public int Hp { get; set; }
         public int Capacity { get; set; }

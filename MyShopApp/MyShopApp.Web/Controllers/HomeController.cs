@@ -24,9 +24,9 @@ namespace MyShopApp.Web.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<MotocycleDTO> motocyclesDtos = orderService.GetMotocycles();
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<MotocycleDTO, MotocycleViewModel>()).CreateMapper();
-            var motocycles = mapper.Map<IEnumerable<MotocycleDTO>, List<MotocycleViewModel>>(motocyclesDtos);
+            IEnumerable<MotorcycleDTO> motocyclesDtos = orderService.GetMotocycles();
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<MotorcycleDTO, MotocycleViewModel>()).CreateMapper();
+            var motocycles = mapper.Map<IEnumerable<MotorcycleDTO>, List<MotocycleViewModel>>(motocyclesDtos);
             return View(motocycles);
         }
 
@@ -36,7 +36,7 @@ namespace MyShopApp.Web.Controllers
             {
                 try
                 {
-                    MotocycleDTO motocycle = orderService.GetMotocycle(id);
+                    MotorcycleDTO motocycle = orderService.GetMotocycle(id);
                     var order = new OrderViewModel { MotocycleID = motocycle.Id };
 
                     return View(order);

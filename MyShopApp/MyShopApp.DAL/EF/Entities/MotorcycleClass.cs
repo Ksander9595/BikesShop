@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace MyShopApp.DAL.EF.Entities
 {
-    public enum MotocycleClass
+    public enum MotorcycleClass
     {
         None = 0,
         Classic,
