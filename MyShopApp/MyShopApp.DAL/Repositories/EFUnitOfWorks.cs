@@ -8,7 +8,7 @@ namespace MyShopApp.DAL.Repositories
     public class EFUnitOfWorks : IUnitOfWork
     {
         private ApplicationDbContext db;
-        private MotocycleRepository motorcycleRepository;
+        private MotorcycleRepository motorcycleRepository;
         private OrderRepository orderRepository;
 
         public EFUnitOfWorks(ApplicationDbContext context)
@@ -20,7 +20,7 @@ namespace MyShopApp.DAL.Repositories
             get 
             { 
                 if(motorcycleRepository == null)
-                    motorcycleRepository = new MotocycleRepository(db);
+                    motorcycleRepository = new MotorcycleRepository(db);
                 return  motorcycleRepository;
             }
         }

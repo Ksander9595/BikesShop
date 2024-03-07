@@ -20,54 +20,57 @@ namespace MyShopApp.BLL.Service
         }
         public void MakeOrder(OrderDTO orderDto)
         {
-            Motorcycle motorcycle = Database.Motorcycles.GetAsync(orderDto.MotocycleID);
+            var TaskMotorcycle = Database.Motorcycles.GetAsync(orderDto.MotorcycleID);
+            var motorcycle = TaskMotorcycle.Result;
            
             if (motorcycle == null)
             {
-                throw new ValidationException("Motocycle not found", "");
+                throw new ValidationException("Motorcycle not found", "");
             }
             decimal sum = new Discount(0.1m).GetDiscountedPrice(motorcycle.Price);
             Order order = new Order
             {
                 Date = DateTime.Now,
                 Address = orderDto.Address,
-                MotocycleId = motorcycle.Id,
+                MotorcycleId = motorcycle.Id,
                 Sum = sum,
                 PhoneNumber = orderDto.PhoneNumber
             };
-            Database.Orders.Create(order);
-            Database.Save();
+            Database.Orders.CreateAsync(order);
+            Database.SaveAsync();
         }
 
-        public IEnumerable<MotorcycleDTO> GetMotocycles()
+        public IEnumerable<MotorcycleDTO> GetMotorcycles()
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Motorcycle, MotorcycleDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Motorcycle>, List<MotorcycleDTO>>(Database.Motorcycles.GetAll());
+            var TaskMotocycles = Database.Motorcycles.GetAllAsync();
+            return mapper.Map<IEnumerable<Motorcycle>, List<MotorcycleDTO>>(TaskMotocycles.Result);
         }
 
-        public MotorcycleDTO GetMotocycle(int? id)
+        public MotorcycleDTO GetMotorcycle(int? id)
         {
             if (id == null)
-                throw new ValidationException("ID motocycle not found", "");
-            var motocycle = Database.Motorcycles.Get(id.Value);
-            if (motocycle == null)
-                throw new ValidationException("Motocycle not found", "");
+                throw new ValidationException("ID motorcycle not found", "");
+            var TaskMotorcycle = Database.Motorcycles.GetAsync(id.Value);
+            var motorcycle = TaskMotorcycle.Result;
+            if (motorcycle == null)
+                throw new ValidationException("Motorcycle not found", "");
 
             return new MotorcycleDTO
             {
-                Name = motocycle.Name,
-                Model = motocycle.Model,
-                Description = motocycle.Description,
-                Price = motocycle.Price,
-                motoClass = motocycle.motoClass,
-                Year = motocycle.Year,
-                Hp = motocycle.Hp,
-                Capacity = motocycle.Capacity,
-                Document = motocycle.Document,
-                Mileage = motocycle.Mileage,
-                Color = motocycle.Color,
-                Condition = motocycle.Condition,
-                Availability = motocycle.Availability
+                Name = motorcycle.Name,
+                Model = motorcycle.Model,
+                Description = motorcycle.Description,
+                Price = motorcycle.Price,
+                motoClass = motorcycle.motoClass,
+                Year = motorcycle.Year,
+                Hp = motorcycle.Hp,
+                Capacity = motorcycle.Capacity,
+                Document = motorcycle.Document,
+                Mileage = motorcycle.Mileage,
+                Color = motorcycle.Color,
+                Condition = motorcycle.Condition,
+                Availability = motorcycle.Availability
             };
         }
 

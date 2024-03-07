@@ -58,10 +58,10 @@ namespace MyShopApp.Web.Controllers
 
         public async Task<IActionResult> Edit(string userId)
         {
-            UserDTO? userDTO = await userService.GetUser(userId);           
+            UserDTO? userDTO = await userService.GetUserAsync(userId);           
             if(userDTO!= null)
             {
-                var userRoles = await userService.GetUserRoles(userDTO);
+                var userRoles = await userService.GetUserRolesAsync(userDTO);
                 var allRoles = roleService.GetRoles();
                 ChangeRoleViewModel model = new ChangeRoleViewModel
                 {
@@ -77,17 +77,17 @@ namespace MyShopApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(string userId, List<string> roles)
         {
-            UserDTO? userDTO = await userService.GetUser(userId);
+            UserDTO? userDTO = await userService.GetUserAsync(userId);
             if(userDTO!= null)
             {
-                var userRoles = await userService.GetUserRoles(userDTO);
+                var userRoles = await userService.GetUserRolesAsync(userDTO);
                 var allRoles = roleService.GetRoles();
                 var addedRoles = roles.Except(userRoles);
                 var removedRoles = userRoles.Except(roles);
 
-                await userService.AddToRoles(userDTO, addedRoles);
+                await userService.AddToRolesAsync(userDTO, addedRoles);
 
-                await userService.RemoveFromRoles(userDTO, removedRoles);
+                await userService.RemoveFromRolesAsync(userDTO, removedRoles);
 
                 return RedirectToAction("UserList", "Users");
             }

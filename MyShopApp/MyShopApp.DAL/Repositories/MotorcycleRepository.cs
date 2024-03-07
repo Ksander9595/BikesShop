@@ -6,10 +6,10 @@ using MyShopApp.DAL.Interfaces;
 
 namespace MyShopApp.DAL.Repositories
 {
-    public class MotocycleRepository : IRepository<Motorcycle>
+    public class MotorcycleRepository : IRepository<Motorcycle>//в каждом методе SaveChangeAsync or общий в UnitOfWork
     {
         private ApplicationDbContext db;
-        public MotocycleRepository(ApplicationDbContext context) 
+        public MotorcycleRepository(ApplicationDbContext context) 
         {
             db = context;
         }

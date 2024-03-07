@@ -5,8 +5,8 @@ namespace MyShopApp.BLL.Interfaces
     public interface IOrderService : IDisposable
     {
         void MakeOrder(OrderDTO orderDto);
-        MotorcycleDTO GetMotocycle(int? id);
-        IEnumerable<MotorcycleDTO> GetMotocycles();
+        MotorcycleDTO GetMotorcycle(int? id);
+        IEnumerable<MotorcycleDTO> GetMotorcycles();
         
     }
 }

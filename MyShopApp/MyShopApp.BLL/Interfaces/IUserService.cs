@@ -5,14 +5,14 @@ namespace MyShopApp.BLL.Interfaces
 {
     public interface IUserService : IDisposable
     {
-        Task<IdentityResult> Delete(string Id);
-        Task<IdentityResult> Create(UserDTO userDTO, string password);
-        Task<IdentityResult> Update(UserDTO userDTO);
-        IEnumerable<UserDTO> GetUsers();
-        Task<UserDTO> GetUser(string Id);
-        Task<IList<string>> GetUserRoles(UserDTO userDTo);
-        Task<IdentityResult> ChangePassword(UserDTO userDTO, string oldPassword, string newPassword);
-        Task<IdentityResult> AddToRoles(UserDTO userDTO, IEnumerable<string> addedRoles);
-        Task<IdentityResult> RemoveFromRoles(UserDTO userDTO, IEnumerable<string> removeRoles);
+        Task<IdentityResult> DeleteAsync(string Id);
+        Task<IdentityResult> CreateAsync(UserDTO userDTO, string password);
+        Task<IdentityResult> UpdateAsync(UserDTO userDTO);
+        IEnumerable<UserDTO> GetUsersAsync();
+        Task<UserDTO> GetUserAsync(string Id);
+        Task<IList<string>> GetUserRolesAsync(UserDTO userDTo);
+        Task<IdentityResult> ChangePasswordAsync(UserDTO userDTO, string oldPassword, string newPassword);
+        Task<IdentityResult> AddToRolesAsync(UserDTO userDTO, IEnumerable<string> addedRoles);
+        Task<IdentityResult> RemoveFromRolesAsync(UserDTO userDTO, IEnumerable<string> removeRoles);
     }
 }

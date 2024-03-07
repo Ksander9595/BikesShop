@@ -17,7 +17,7 @@ namespace MyShopApp.Web.Controllers
         {
             return View(User);
         }
-        public IActionResult UserList() => View(userService.GetUsers());
+        public IActionResult UserList() => View(userService.GetUsersAsync());
 
         public IActionResult Create() => View();
 
@@ -27,7 +27,7 @@ namespace MyShopApp.Web.Controllers
             if (ModelState.IsValid)
             {
                 UserDTO userDTO = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year };               
-                var result = await userService.Create(userDTO, model.Password);               
+                var result = await userService.CreateAsync(userDTO, model.Password);               
                 if(result.Succeeded)
                 {
                     return RedirectToAction("UserList");
@@ -44,7 +44,7 @@ namespace MyShopApp.Web.Controllers
         }
         public async Task<IActionResult> Edit(string id)
         {
-            UserDTO userDTO = await userService.GetUser(id);
+            UserDTO userDTO = await userService.GetUserAsync(id);
             if(userDTO == null)
             {
                 return NotFound();
@@ -58,14 +58,14 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDTO? userDTO = await userService.GetUser(model.Id);
+                UserDTO? userDTO = await userService.GetUserAsync(model.Id);
                 if(userDTO!=null)
                 {
                     userDTO.Email = model.Email;
                     userDTO.Name = model.Email;
                     userDTO.Year = model.Year;
 
-                    var result = await userService.Update(userDTO);
+                    var result = await userService.UpdateAsync(userDTO);
                     if(result.Succeeded)
                     {
                         return RedirectToAction("UserList");
@@ -85,7 +85,7 @@ namespace MyShopApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await userService.Delete(id);
+            var result = await userService.DeleteAsync(id);
             if (result.Succeeded)
             {
                 return RedirectToAction("UserList");
@@ -102,7 +102,7 @@ namespace MyShopApp.Web.Controllers
 
         public async Task<IActionResult> ChangePassword(string Id)
         {
-            UserDTO userDTO = await userService.GetUser(Id);
+            UserDTO userDTO = await userService.GetUserAsync(Id);
             if(userDTO==null )
             {
                 return NotFound();
@@ -116,10 +116,10 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDTO? userDTO = await userService.GetUser(model.Id); 
+                UserDTO? userDTO = await userService.GetUserAsync(model.Id); 
                 if(userDTO!=null)
                 {
-                    var result = await userService.ChangePassword(userDTO, model.OldPassword, model.NewPassword);
+                    var result = await userService.ChangePasswordAsync(userDTO, model.OldPassword, model.NewPassword);
                     if(result.Succeeded)
                     {                        
                         return RedirectToAction("UserList");

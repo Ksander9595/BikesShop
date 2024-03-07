@@ -24,10 +24,10 @@ namespace MyShopApp.Web.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<MotorcycleDTO> motocyclesDtos = orderService.GetMotocycles();
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<MotorcycleDTO, MotocycleViewModel>()).CreateMapper();
-            var motocycles = mapper.Map<IEnumerable<MotorcycleDTO>, List<MotocycleViewModel>>(motocyclesDtos);
-            return View(motocycles);
+            IEnumerable<MotorcycleDTO> motorcyclesDtos = orderService.GetMotorcycles();
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<MotorcycleDTO, MotorcycleViewModel>()).CreateMapper();
+            var motorcycles = mapper.Map<IEnumerable<MotorcycleDTO>, List<MotorcycleViewModel>>(motorcyclesDtos);
+            return View(motorcycles);
         }
 
         public IActionResult MakeOrder(int? id)
@@ -36,8 +36,8 @@ namespace MyShopApp.Web.Controllers
             {
                 try
                 {
-                    MotorcycleDTO motocycle = orderService.GetMotocycle(id);
-                    var order = new OrderViewModel { MotocycleID = motocycle.Id };
+                    MotorcycleDTO motorcycle = orderService.GetMotorcycle(id);
+                    var order = new OrderViewModel { MotorcycleID = motorcycle.Id };
 
                     return View(order);
                 }
@@ -59,7 +59,7 @@ namespace MyShopApp.Web.Controllers
                 {
                     var orderDto = new OrderDTO
                     {
-                        MotocycleID = order.MotocycleID,
+                        MotorcycleID = order.MotorcycleID,
                         FirstName = order.FirstName,
                         SecondName = order.SecondName,
                         PhoneNumber = order.PhoneNumber,

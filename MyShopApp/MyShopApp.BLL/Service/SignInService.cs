@@ -31,7 +31,22 @@ namespace MyShopApp.BLL.Service
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    userManager.Dispose();
+
+                }
+                this.disposed = true;
+            }
         }
     }
 }

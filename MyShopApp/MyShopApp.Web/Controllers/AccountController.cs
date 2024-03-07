@@ -27,7 +27,7 @@ namespace MyShopApp.Web.Controllers
             {
                 UserDTO? userDTO = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year };
 
-                var result = await userService.Create(userDTO, model.Password);
+                var result = await userService.CreateAsync(userDTO, model.Password);
                 if(result.Succeeded)
                 {
                     await signInService.SignIn(userDTO, false);//устанавливаются аутентификационные куки

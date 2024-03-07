@@ -17,7 +17,7 @@ namespace MyShopApp.BLL.Service
             userManager = _userManager;            
         }
       
-        public async Task<UserDTO> GetUser(string Id)
+        public async Task<UserDTO> GetUserAsync(string Id)
         {
             User? user = await userManager.FindByIdAsync(Id);
 
@@ -28,18 +28,18 @@ namespace MyShopApp.BLL.Service
                 Year = user.Year               
             };                       
         }      
-        public IEnumerable<UserDTO> GetUsers()
+        public IEnumerable<UserDTO> GetUsersAsync()
         {            
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<User, UserDTO>()).CreateMapper();
             return mapper.Map<IEnumerable<User>, List<UserDTO>>(userManager.Users);
 
         }
-        public async Task<IdentityResult> Create(UserDTO userDTO, string password)
+        public async Task<IdentityResult> CreateAsync(UserDTO userDTO, string password)
         {
             User user = new User { Email = userDTO.Email, UserName = userDTO.Email, Year = userDTO.Year };
             return await userManager.CreateAsync(user, password);
         }      
-        public async Task<IdentityResult> Update(UserDTO userDTO)
+        public async Task<IdentityResult> UpdateAsync(UserDTO userDTO)
         {
             User? user = await userManager.FindByIdAsync(userDTO.Id);
             if(user!=null)
@@ -50,28 +50,28 @@ namespace MyShopApp.BLL.Service
             }
             return await userManager.UpdateAsync(user);
         }
-        public async Task<IdentityResult> Delete(string Id)
+        public async Task<IdentityResult> DeleteAsync(string Id)
         {
             User? user = await userManager.FindByIdAsync(Id);          
             return await userManager.DeleteAsync(user);                             
         }
-        public async Task<IdentityResult> ChangePassword(UserDTO userDTO, string oldPass, string newPass)
+        public async Task<IdentityResult> ChangePasswordAsync(UserDTO userDTO, string oldPass, string newPass)
         {
             User? user = await userManager.FindByIdAsync(userDTO.Id);
             return await userManager.ChangePasswordAsync(user, oldPass, newPass);
 
         }
-        public async Task<IList<string>> GetUserRoles(UserDTO userDTO)
+        public async Task<IList<string>> GetUserRolesAsync(UserDTO userDTO)
         {
             User? user = await userManager.FindByIdAsync(userDTO.Id);
             return await userManager.GetRolesAsync(user);
         }
-        public async Task<IdentityResult> AddToRoles(UserDTO userDTO, IEnumerable<string> addedRoles)
+        public async Task<IdentityResult> AddToRolesAsync(UserDTO userDTO, IEnumerable<string> addedRoles)
         {
             User? user = await userManager.FindByIdAsync(userDTO.Id);
             return await userManager.AddToRolesAsync(user, addedRoles);
         }
-        public async Task<IdentityResult> RemoveFromRoles(UserDTO userDTO, IEnumerable<string> removeRoles)
+        public async Task<IdentityResult> RemoveFromRolesAsync(UserDTO userDTO, IEnumerable<string> removeRoles)
         {
             User? user = await userManager.FindByIdAsync(userDTO.Id);
             return await userManager.RemoveFromRolesAsync(user, removeRoles);
@@ -79,7 +79,21 @@ namespace MyShopApp.BLL.Service
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    userManager.Dispose();                   
+                }
+                this.disposed = true;
+            }
         }
     }
 }
