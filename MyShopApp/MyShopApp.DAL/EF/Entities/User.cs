@@ -4,7 +4,8 @@ namespace MyShopApp.DAL.EF.Entities
 {
     public class User : IdentityUser
     {
-        public int Year { get; set; }      
+        public int Year { get; set; }     
+        public virtual ClientProfile ClientProfile { get; set; }
         
     }
 }

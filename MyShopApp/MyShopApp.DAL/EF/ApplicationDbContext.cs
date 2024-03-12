@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using MyShopApp.DAL.EF.Entities;
 
 namespace MyShopApp.DAL.EF
@@ -8,6 +9,7 @@ namespace MyShopApp.DAL.EF
     {
         public DbSet<Order> Orders { get; set; }
         public DbSet<Motorcycle> Motorcycles { get; set; } = null!;
+        public DbSet<ClientProfile> ClientProfiles { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

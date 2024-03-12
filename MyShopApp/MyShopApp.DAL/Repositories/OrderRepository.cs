@@ -20,14 +20,12 @@ namespace MyShopApp.DAL.Repositories
         }
         public async Task<Order> GetAsync(int id)
         {
-            var result = await db.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
-            await db.SaveChangesAsync();
-            return result;
+            return await db.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
+            
         }
         public async Task CreateAsync(Order order)
         {
-            await db.Orders.AddAsync(order);
-            await db.SaveChangesAsync();
+            await db.Orders.AddAsync(order);           
         }
         public async Task UpdateAsync(Order order)
         {

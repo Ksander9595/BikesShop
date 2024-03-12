@@ -8,6 +8,7 @@ namespace MyShopApp.DAL.Repositories
     public class EFUnitOfWorks : IUnitOfWork
     {
         private ApplicationDbContext db;
+
         private MotorcycleRepository motorcycleRepository;
         private OrderRepository orderRepository;
 
