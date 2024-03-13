@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace MyShopApp.Web.Models
 {
@@ -13,9 +14,13 @@ namespace MyShopApp.Web.Models
         public int Year { get; set; }
 
         [Required]
+        [Display(Name = "Address")]
+        public string? Address { get; set; }
+
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string? Password { get; set; }
+        public string? Password { get; set; }      
 
         [Required]
         [Compare("Password", ErrorMessage = "Password mismatch")]

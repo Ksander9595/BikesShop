@@ -2,19 +2,18 @@
 using MyShopApp.Web.Models;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.BLL.DTO;
+using MyShopApp.BLL.Infrastructure;
 
 namespace MyShopApp.Web.Controllers
 {
     public class AccountController : Controller
     {
         
-        IUserService userService;       
-        ISignInService signInService;
+        IUserService userService;              
 
-        public AccountController(IUserService _userService, ISignInService _signInService)
+        public AccountController(IUserService _userService)
         {
-            userService = _userService;
-            signInService = _signInService;
+            userService = _userService;            
         }
 
         [HttpGet]
@@ -25,24 +24,30 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDTO? userDTO = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year };
+                UserDTO? userDTO = new UserDTO 
+                { 
+                    Email = model.Email, 
+                    Name = model.Email, 
+                    Password = model.Password, 
+                    Address = model.Address, 
+                    Year = model.Year,
+                    Role = "user"
+                };
 
-                var result = await userService.CreateAsync(userDTO, model.Password);
-                if(result.Succeeded)
+                var result = await userService.CreateUserAsync(userDTO);
+                if(result.Succedeed)
                 {
-                    await signInService.SignIn(userDTO, false);//устанавливаются аутентификационные куки
+                    await userService.SignIn(userDTO, false);//устанавливаются аутентификационные куки
                     return RedirectToAction("HomePage", "Home");
                 }
                 else
                 {
-                    foreach(var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    ModelState.AddModelError(result.Property, result.Message);                                     
                 }
             }
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
@@ -57,24 +62,19 @@ namespace MyShopApp.Web.Controllers
             {
                 UserDTO? userDTO = new UserDTO { Email = model.Email, Password = model.Password };
                 bool RememberMe = model.RememberMe;
-                var result = await signInService.PasswordSignIn(userDTO, RememberMe, false);//аутентификация пользователя
+                var result = await userService.PasswordSignIn(userDTO, RememberMe, false);//аутентификация пользователя
 
-                if (result.Succeeded)
+                if (result.Succedeed)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("HomePage", "Home");
-                    }                   
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))                    
+                        return Redirect(model.ReturnUrl);                    
+                    else                    
+                        return RedirectToAction("HomePage", "Home");                                       
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Incorrect login and (or) password");
-                }    
-               
+                    ModelState.AddModelError(result.Property, result.Message);
+                }                 
             }
             return View(model);
         }
@@ -83,7 +83,7 @@ namespace MyShopApp.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await signInService.SignOutAsync();//удаляет аутентификационные куки
+            await userService.SignOutAsync();//удаляет аутентификационные куки
             return RedirectToAction("HomePage", "Home");
         }                    
     }

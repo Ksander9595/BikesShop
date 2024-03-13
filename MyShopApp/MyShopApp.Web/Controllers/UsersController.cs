@@ -65,7 +65,7 @@ namespace MyShopApp.Web.Controllers
                     userDTO.Name = model.Email;
                     userDTO.Year = model.Year;
 
-                    var result = await userService.UpdateAsync(userDTO);
+                    var result = await userService.UpdateUserAsync(userDTO);
                     if(result.Succeeded)
                     {
                         return RedirectToAction("UserList");

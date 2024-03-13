@@ -11,18 +11,25 @@ namespace MyShopApp.DAL.Repositories
 
         private ApplicationUserManager userManager;
         private ApplicationRoleManager roleManager;
+        private ApplicationSignInManager signInManager;
         private IClientManager clientManager;
 
-        public IdentityUnitOfWork(ApplicationDbContext Database, ApplicationUserManager UserManager, ApplicationRoleManager RoleManager, IClientManager ClientManager)
+        public IdentityUnitOfWork(ApplicationDbContext Database, 
+            ApplicationUserManager UserManager, 
+            ApplicationRoleManager RoleManager, 
+            ApplicationSignInManager SignInManager,
+            IClientManager ClientManager)
         {
             db = Database;
             userManager = UserManager;
             roleManager = RoleManager;
+            signInManager = SignInManager;
             clientManager = ClientManager;
         }
 
         public ApplicationUserManager UserManager { get { return userManager; } }
         public ApplicationRoleManager RoleManager { get { return roleManager; } }
+        public ApplicationSignInManager SignInManager { get { return signInManager; } }
         public IClientManager ClientManager { get { return clientManager; } }
         public async Task SaveAsync()
         {
@@ -43,6 +50,7 @@ namespace MyShopApp.DAL.Repositories
                  {
                     userManager.Dispose();
                     roleManager.Dispose();
+                    //signInManager.Dispose();
                     clientManager.Dispose();
                  }
                  this.disposed = true;              

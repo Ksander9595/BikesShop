@@ -18,10 +18,10 @@ namespace MyShopApp.BLL.Service
         {
             Database = uow;
         }
-        public void MakeOrder(OrderDTO orderDto)
+        public async Task MakeOrder(OrderDTO orderDto)
         {
-            var TaskMotorcycle = Database.Motorcycles.GetAsync(orderDto.MotorcycleID);
-            var motorcycle = TaskMotorcycle.Result;
+            var motorcycle = await Database.Motorcycles.GetAsync(orderDto.MotorcycleID);
+            
            
             if (motorcycle == null)
             {
@@ -36,8 +36,8 @@ namespace MyShopApp.BLL.Service
                 Sum = sum,
                 PhoneNumber = orderDto.PhoneNumber
             };
-            Database.Orders.CreateAsync(order);
-            Database.SaveAsync();
+            await Database.Orders.CreateAsync(order);
+            await Database.SaveAsync();
         }
 
         public IEnumerable<MotorcycleDTO> GetMotorcycles()

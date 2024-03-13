@@ -10,7 +10,7 @@ namespace MyShopApp.BLL.Service
     {
         
         RoleManager<IdentityRole> roleManager;
-
+        
         public RoleService(RoleManager<IdentityRole> _roleManager)
         {            
             roleManager = _roleManager;

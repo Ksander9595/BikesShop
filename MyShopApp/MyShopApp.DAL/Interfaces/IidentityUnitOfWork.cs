@@ -6,6 +6,7 @@ namespace MyShopApp.DAL.Interfaces
     {
         ApplicationUserManager UserManager { get; }
         ApplicationRoleManager RoleManager { get; }
+        ApplicationSignInManager SignInManager { get; }
         IClientManager ClientManager { get; }
         Task SaveAsync();
     }
