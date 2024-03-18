@@ -1,12 +1,16 @@
-﻿using MyShopApp.DAL.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using MyShopApp.DAL.EF.Entities;
 
 namespace MyShopApp.DAL.Interfaces
 {
     public interface IidentityUnitOfWork : IDisposable
     {
-        ApplicationUserManager UserManager { get; }
-        ApplicationRoleManager RoleManager { get; }
-        ApplicationSignInManager SignInManager { get; }
+        UserManager<User> UserManager { get; }
+        RoleManager<Role> RoleManager { get; }
+        SignInManager<User> SignInManager { get; }
+        //ApplicationUserManager UserManager { get; }
+        //ApplicationRoleManager RoleManager { get; }
+        //ApplicationSignInManager SignInManager { get; }
         IClientManager ClientManager { get; }
         Task SaveAsync();
     }

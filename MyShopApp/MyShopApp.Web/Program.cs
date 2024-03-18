@@ -16,8 +16,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<ISignInService, SignInService>();
+//builder.Services.AddScoped<IRoleService, RoleService>();
+//builder.Services.AddScoped<ISignInService, SignInService>();
 builder.Services.AddScoped<IUnitOfWork, EFUnitOfWorks>();
 builder.Services.AddScoped<IidentityUnitOfWork, IdentityUnitOfWork>();
 

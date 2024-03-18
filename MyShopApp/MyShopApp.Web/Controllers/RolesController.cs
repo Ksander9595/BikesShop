@@ -28,7 +28,7 @@ namespace MyShopApp.Web.Controllers
             {
                 RoleDTO roleDTO = new RoleDTO { RoleName = name };
                 var result = await userService.CreateRoleAsync(roleDTO);               
-                if (result.Succedeed)
+                if (result.Succeeded)
                     return RedirectToAction("RolesList");
                 else                  
                     ModelState.AddModelError(result.Property, result.Message);
@@ -43,7 +43,7 @@ namespace MyShopApp.Web.Controllers
             if(roleDTO != null) 
             {
                var result = await userService.DeleteRoleAsync(roleDTO);
-                if (result.Succedeed)
+                if (result.Succeeded)
                     return RedirectToAction("RolesList");
                 else
                     ModelState.AddModelError(result.Property, result.Message);

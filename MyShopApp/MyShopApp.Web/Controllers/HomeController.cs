@@ -23,20 +23,19 @@ namespace MyShopApp.Web.Controllers
             return View();
         }
         public IActionResult Index()
-        {
-            IEnumerable<MotorcycleDTO> motorcyclesDtos = orderService.GetMotorcycles();
+        {          
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<MotorcycleDTO, MotorcycleViewModel>()).CreateMapper();
-            var motorcycles = mapper.Map<IEnumerable<MotorcycleDTO>, List<MotorcycleViewModel>>(motorcyclesDtos);
+            var motorcycles = mapper.Map<IEnumerable<MotorcycleDTO>, List<MotorcycleViewModel>>(orderService.GetMotorcycles());
             return View(motorcycles);
         }
 
-        public IActionResult MakeOrder(int? id)
+        public async Task<IActionResult> MakeOrder(int? id)
         {
             if (User.Identity.IsAuthenticated)
             {
                 try
                 {
-                    MotorcycleDTO motorcycle = orderService.GetMotorcycle(id);
+                    MotorcycleDTO motorcycle = await orderService.GetMotorcycleAsync(id);
                     var order = new OrderViewModel { MotorcycleID = motorcycle.Id };
 
                     return View(order);
@@ -53,7 +52,7 @@ namespace MyShopApp.Web.Controllers
             }
         }
         [HttpPost]
-        public IActionResult MakeOrder(OrderViewModel order)
+        public async Task<IActionResult> MakeOrder(OrderViewModel order)
         {           
                 try
                 {
@@ -66,7 +65,7 @@ namespace MyShopApp.Web.Controllers
                         Address = order.Address,
                         Date = order.Date
                     };
-                    orderService.MakeOrder(orderDto);
+                    await orderService.MakeOrder(orderDto);
                     return Content("<h2>Your order successfully completed<h2>");
                 }
                 catch (ValidationException ex)

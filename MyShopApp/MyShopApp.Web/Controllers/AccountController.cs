@@ -35,7 +35,7 @@ namespace MyShopApp.Web.Controllers
                 };
 
                 var result = await userService.CreateUserAsync(userDTO);
-                if(result.Succedeed)
+                if(result.Succeeded)
                 {
                     await userService.SignIn(userDTO, false);//устанавливаются аутентификационные куки
                     return RedirectToAction("HomePage", "Home");
@@ -64,7 +64,7 @@ namespace MyShopApp.Web.Controllers
                 bool RememberMe = model.RememberMe;
                 var result = await userService.PasswordSignIn(userDTO, RememberMe, false);//аутентификация пользователя
 
-                if (result.Succedeed)
+                if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))                    
                         return Redirect(model.ReturnUrl);                    

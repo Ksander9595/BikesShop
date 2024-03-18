@@ -5,18 +5,16 @@ using MyShopApp.DAL.Interfaces;
 
 namespace MyShopApp.DAL.Repositories
 {
-    public class OrderRepository : IRepository<Order>//??
+    public class OrderRepository : IRepository<Order>//GetAll, Find, Update async?
     {
         private ApplicationDbContext db;
         public OrderRepository(ApplicationDbContext context)
         {
             db = context;
         }
-        public async Task<IEnumerable<Order>> GetAllAsync()
+        public IEnumerable<Order> GetAll()
         {            
-            var result = db.Orders.Include(o=>o.motorcycle);
-            await db.SaveChangesAsync();
-            return result;
+            return db.Orders.Include(o=>o.motorcycle);            
         }
         public async Task<Order> GetAsync(int id)
         {
@@ -27,10 +25,9 @@ namespace MyShopApp.DAL.Repositories
         {
             await db.Orders.AddAsync(order);           
         }
-        public async Task UpdateAsync(Order order)
+        public void Update(Order order)
         {
-            db.Orders.Update(order);
-            await db.SaveChangesAsync();
+            db.Orders.Update(order);           
         }
         public async Task DeleteAsync(int id)
         {
@@ -38,17 +35,15 @@ namespace MyShopApp.DAL.Repositories
             {
                 Order? order = await db.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
                 db.Orders.Remove(order);
-            }
-            await db.SaveChangesAsync();
+            }           
         }
-        public async Task<IEnumerable<Order>> FindAsync(Func<Order, Boolean> predicate)
+        public IEnumerable<Order> Find(Func<Order, Boolean> predicate)
         {
-            var result = db.Orders
+            return db.Orders
                 .Include(o=>o.motorcycle)
                 .Where(predicate)
                 .ToList();
-            await db.SaveChangesAsync();
-            return result;
+            
         }
     }
 }

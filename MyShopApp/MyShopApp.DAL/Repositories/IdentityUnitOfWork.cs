@@ -1,4 +1,6 @@
-﻿using MyShopApp.DAL.EF;
+﻿using Microsoft.AspNetCore.Identity;
+using MyShopApp.DAL.EF;
+using MyShopApp.DAL.EF.Entities;
 using MyShopApp.DAL.Identity;
 using MyShopApp.DAL.Interfaces;
 
@@ -9,16 +11,23 @@ namespace MyShopApp.DAL.Repositories
     {
         private ApplicationDbContext db;
 
-        private ApplicationUserManager userManager;
-        private ApplicationRoleManager roleManager;
-        private ApplicationSignInManager signInManager;
+        //private ApplicationUserManager userManager;
+        //private ApplicationRoleManager roleManager;
+        //private ApplicationSignInManager signInManager;
+        private UserManager<User> userManager;
+        private RoleManager<Role> roleManager;
+        private SignInManager<User> signInManager;
         private IClientManager clientManager;
 
-        public IdentityUnitOfWork(ApplicationDbContext Database, 
-            ApplicationUserManager UserManager, 
-            ApplicationRoleManager RoleManager, 
-            ApplicationSignInManager SignInManager,
-            IClientManager ClientManager)
+        public IdentityUnitOfWork(ApplicationDbContext Database,
+            //ApplicationUserManager UserManager, 
+            //ApplicationRoleManager RoleManager, 
+            //ApplicationSignInManager SignInManager,
+            UserManager<User> UserManager,
+            RoleManager<Role> RoleManager,
+            SignInManager<User> SignInManager,
+
+        IClientManager ClientManager)
         {
             db = Database;
             userManager = UserManager;
@@ -27,9 +36,13 @@ namespace MyShopApp.DAL.Repositories
             clientManager = ClientManager;
         }
 
-        public ApplicationUserManager UserManager { get { return userManager; } }
-        public ApplicationRoleManager RoleManager { get { return roleManager; } }
-        public ApplicationSignInManager SignInManager { get { return signInManager; } }
+        //public ApplicationUserManager UserManager { get { return userManager; } }
+        //public ApplicationRoleManager RoleManager { get { return roleManager; } }
+        //public ApplicationSignInManager SignInManager { get { return signInManager; } }
+
+        public UserManager<User> UserManager { get { return userManager; } }
+        public RoleManager<Role> RoleManager { get { return roleManager; } }
+        public SignInManager<User> SignInManager { get { return signInManager; } }
         public IClientManager ClientManager { get { return clientManager; } }
         public async Task SaveAsync()
         {

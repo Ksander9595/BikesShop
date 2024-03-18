@@ -6,7 +6,7 @@ using MyShopApp.DAL.Interfaces;
 
 namespace MyShopApp.DAL.Repositories
 {
-    public class MotorcycleRepository : IRepository<Motorcycle>//в каждом методе SaveChangeAsync or общий в UnitOfWork
+    public class MotorcycleRepository : IRepository<Motorcycle>//GetAllAsync or not
     {
         private ApplicationDbContext db;
         public MotorcycleRepository(ApplicationDbContext context)
@@ -25,10 +25,9 @@ namespace MyShopApp.DAL.Repositories
         {
             await db.Motorcycles.AddAsync(motorcycle);
         }
-        public async Task UpdateAsync(Motorcycle motorcycle)
+        public void Update(Motorcycle motorcycle)
         {
-            db.Motorcycles.Update(motorcycle);
-            await db.SaveChangesAsync();
+            db.Motorcycles.Update(motorcycle);           
         }
         public async Task DeleteAsync(int id)
         {
@@ -38,11 +37,9 @@ namespace MyShopApp.DAL.Repositories
                 db.Motorcycles.Remove(motorcycle);
             }
         }
-        public async Task<IEnumerable<Motorcycle>> FindAsync(Func<Motorcycle, Boolean> predicate)
-        {
-            await db.SaveChangesAsync();
+        public IEnumerable<Motorcycle> Find(Func<Motorcycle, Boolean> predicate)
+        {            
             return db.Motorcycles.Where(predicate).ToList();
-
         }
 
     }

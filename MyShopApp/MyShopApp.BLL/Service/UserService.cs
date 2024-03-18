@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MyShopApp.BLL.Service
 {
-    public class UserService : IUserService //GetUsers or GetUsersRoleAsync
+    public class UserService : IUserService //GetUsers and GetUsersRoleAsync
     {
-        IidentityUnitOfWork Database { get; set; }
+        IidentityUnitOfWork Database;
         
         public UserService(IidentityUnitOfWork db) 
         {          
@@ -101,7 +101,7 @@ namespace MyShopApp.BLL.Service
         {
             User? user = await Database.UserManager.FindByEmailAsync(userDTO.Email);
             if (user == null)
-            {
+            {                
                 user = new User { Email = userDTO.Email, UserName = userDTO.Email, Year = userDTO.Year };
                 var result = await Database.UserManager.CreateAsync(user, userDTO.Password);
                 if (result.Errors.Count() > 0)

@@ -17,7 +17,7 @@ namespace MyShopApp.Web.Controllers
         {
             return View(User);
         }
-        public IActionResult UserList() => View(userService.GetUsersAsync());
+        public IActionResult UserList() => View(userService.GetUsers());
 
         public IActionResult Create() => View();
 
@@ -26,18 +26,15 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDTO userDTO = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year };               
-                var result = await userService.CreateAsync(userDTO, model.Password);               
+                UserDTO userDTO = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year, Password = model.Password };               
+                var result = await userService.CreateUserAsync(userDTO);               
                 if(result.Succeeded)
                 {
                     return RedirectToAction("UserList");
                 }
                 else
-                {
-                    foreach(var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                {                                        
+                    ModelState.AddModelError(result.Property, result.Message);                    
                 }
             }
             return View(model);
@@ -71,11 +68,8 @@ namespace MyShopApp.Web.Controllers
                         return RedirectToAction("UserList");
                     }
                     else
-                    {
-                        foreach(var error in result.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
+                    {                       
+                        ModelState.AddModelError(result.Property, result.Message);
                     }
                 }
             }
@@ -85,17 +79,14 @@ namespace MyShopApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await userService.DeleteAsync(id);
+            var result = await userService.DeleteUserAsync(id);
             if (result.Succeeded)
             {
                 return RedirectToAction("UserList");
             }
             else
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+               ModelState.AddModelError(result.Property, result.Message);
             }
             return View();//?
         }
@@ -126,10 +117,7 @@ namespace MyShopApp.Web.Controllers
                     }
                     else
                     {
-                        foreach(var error in result.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
+                        ModelState.AddModelError(result.Property, result.Message);
                     }
                 }
                 else

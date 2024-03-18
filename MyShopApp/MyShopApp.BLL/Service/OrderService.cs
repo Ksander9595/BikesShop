@@ -10,7 +10,7 @@ using AutoMapper;
 
 namespace MyShopApp.BLL.Service
 {
-    public class OrderService : IOrderService//async-await
+    public class OrderService : IOrderService//GetMotorcyclesAsync
     {
         IUnitOfWork Database;
 
@@ -20,8 +20,7 @@ namespace MyShopApp.BLL.Service
         }
         public async Task MakeOrder(OrderDTO orderDto)
         {
-            var motorcycle = await Database.Motorcycles.GetAsync(orderDto.MotorcycleID);
-            
+            var motorcycle = await Database.Motorcycles.GetAsync(orderDto.MotorcycleID);            
            
             if (motorcycle == null)
             {
@@ -42,17 +41,15 @@ namespace MyShopApp.BLL.Service
 
         public IEnumerable<MotorcycleDTO> GetMotorcycles()
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Motorcycle, MotorcycleDTO>()).CreateMapper();
-            var TaskMotocycles = Database.Motorcycles.GetAllAsync();
-            return mapper.Map<IEnumerable<Motorcycle>, List<MotorcycleDTO>>(TaskMotocycles.Result);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Motorcycle, MotorcycleDTO>()).CreateMapper();          
+            return mapper.Map<IEnumerable<Motorcycle>, List<MotorcycleDTO>>(Database.Motorcycles.GetAll());
         }
 
-        public MotorcycleDTO GetMotorcycle(int? id)
-        {
+        public async Task<MotorcycleDTO> GetMotorcycleAsync(int? id)
+        {           
             if (id == null)
                 throw new ValidationException("ID motorcycle not found", "");
-            var TaskMotorcycle = Database.Motorcycles.GetAsync(id.Value);
-            var motorcycle = TaskMotorcycle.Result;
+            var motorcycle = await Database.Motorcycles.GetAsync(id.Value);
             if (motorcycle == null)
                 throw new ValidationException("Motorcycle not found", "");
 
