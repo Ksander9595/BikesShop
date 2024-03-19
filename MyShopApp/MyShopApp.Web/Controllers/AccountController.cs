@@ -31,9 +31,15 @@ namespace MyShopApp.Web.Controllers
                     Password = model.Password, 
                     Address = model.Address, 
                     Year = model.Year,
-                    Role = "user"
+                    //Role = "user"
                 };
-
+                if (userService.GetRoles().FirstOrDefault().RoleName == "user")
+                    await userService.AddToRoleAsync(userDTO, "user");
+                else
+                {
+                    await userService.CreateRoleAsync(new RoleDTO { RoleName = "user" });
+                    await userService.AddToRoleAsync(userDTO, "user");
+                }
                 var result = await userService.CreateUserAsync(userDTO);
                 if(result.Succeeded)
                 {

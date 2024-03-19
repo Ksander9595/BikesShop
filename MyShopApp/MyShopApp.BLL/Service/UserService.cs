@@ -106,7 +106,7 @@ namespace MyShopApp.BLL.Service
                 var result = await Database.UserManager.CreateAsync(user, userDTO.Password);
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
-                await Database.UserManager.AddToRoleAsync(user, userDTO.Role);
+                //await Database.UserManager.AddToRoleAsync(user, userDTO.Role);
                 ClientProfile clientProfile = new ClientProfile { Id = user.Id, Address = userDTO.Address, Name = userDTO.Name };
                 await Database.ClientManager.CreateAsync(clientProfile);
                 await Database.SaveAsync();
@@ -184,7 +184,7 @@ namespace MyShopApp.BLL.Service
             User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
             if( user != null )
             {
-                var result = await Database.UserManager.AddToRolesAsync(user, addedRoles);
+                var result = await Database.UserManager.AddToRolesAsync(user, addedRoles);              
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
                 await Database.SaveAsync();
@@ -194,6 +194,22 @@ namespace MyShopApp.BLL.Service
             {
                 return new OperationDetails(false, "Roles added error", "Role");
             }    
+        }
+        public async Task<OperationDetails> AddToRoleAsync(UserDTO userDTO, string role)
+        {
+            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
+            if (user != null)
+            {
+                var result = await Database.UserManager.AddToRoleAsync(user, role);
+                if (result.Errors.Count() > 0)
+                    return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
+                await Database.SaveAsync();
+                return new OperationDetails(true, "Role added successful", "");
+            }
+            else
+            {
+                return new OperationDetails(false, "Role added error", "Role");
+            }
         }
 
         public async Task<OperationDetails> RemoveFromRolesAsync(UserDTO userDTO, IEnumerable<string> removeRoles)

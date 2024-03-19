@@ -18,6 +18,7 @@ namespace MyShopApp.BLL.Interfaces
         Task<OperationDetails> ChangePasswordAsync(UserDTO userDTO, string oldPass, string newPass);
         Task<IList<string>> GetUserRolesAsync(UserDTO userDTO);
         Task<OperationDetails> AddToRolesAsync(UserDTO userDTO, IEnumerable<string> addedRoles);
+        Task<OperationDetails> AddToRoleAsync(UserDTO userDTO, string role);
         Task<OperationDetails> RemoveFromRolesAsync(UserDTO userDTO, IEnumerable<string> removeRoles);
         Task SignIn(UserDTO userDTO, bool value);
         Task<OperationDetails> PasswordSignIn(UserDTO userDTO, bool RememberMe, bool value);

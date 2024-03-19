@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MyShopApp.DAL.EF.Entities;
 
+
 namespace MyShopApp.DAL.Interfaces
 {
     public interface IidentityUnitOfWork : IDisposable

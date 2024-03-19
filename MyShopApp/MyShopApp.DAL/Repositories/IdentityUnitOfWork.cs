@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MyShopApp.DAL.EF;
 using MyShopApp.DAL.EF.Entities;
-using MyShopApp.DAL.Identity;
 using MyShopApp.DAL.Interfaces;
 
 
@@ -20,14 +19,14 @@ namespace MyShopApp.DAL.Repositories
         private IClientManager clientManager;
 
         public IdentityUnitOfWork(ApplicationDbContext Database,
-            //ApplicationUserManager UserManager, 
-            //ApplicationRoleManager RoleManager, 
+            //ApplicationUserManager UserManager,
+            //ApplicationRoleManager RoleManager,
             //ApplicationSignInManager SignInManager,
             UserManager<User> UserManager,
             RoleManager<Role> RoleManager,
             SignInManager<User> SignInManager,
-
-        IClientManager ClientManager)
+            IClientManager ClientManager
+            )
         {
             db = Database;
             userManager = UserManager;
