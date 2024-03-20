@@ -22,7 +22,7 @@
                     <a class="btn btn-sm btn-dark" asp-action="Edit" asp-controller="Users" asp-route-id="@u.Id">Edit</a> 
                     <a class="btn btn-sm btn-dark" asp-action="ChangePassword" asp-controller="Users" asp-route-id="@u.Id">Change Password</a>
                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                    <a class="btn btn-sm btn-dark" asp-action="Edit" asp-controller="Roles" asp-route-userid="@u.Id">Access rights</a>
+                    <a class="btn btn-sm btn-dark" asp-action="EditRoles" asp-controller="Roles" asp-route-userid="@u.Id">Access rights</a>
                 </form>
             </td>
         </tr>

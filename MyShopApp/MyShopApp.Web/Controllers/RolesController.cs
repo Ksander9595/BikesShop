@@ -8,16 +8,17 @@ namespace MyShopApp.Web.Controllers
 {
     public class RolesController : Controller
     {
-               
-        IUserService userService;
-        public RolesController(IUserService _userService)
-        {            
+        IUserService userService;       
+        IRoleService roleService;
+        public RolesController(IRoleService _roleService, IUserService _userService)
+        {
             userService = _userService;
+            roleService = _roleService;
         }
 
         public IActionResult RolesList()
         {
-            return View(userService.GetRoles());
+            return View(roleService.GetRoles());
         }
         public IActionResult CreateRole() => View();
 
@@ -27,7 +28,7 @@ namespace MyShopApp.Web.Controllers
             if(!string.IsNullOrEmpty(name))
             {
                 RoleDTO roleDTO = new RoleDTO { RoleName = name };
-                var result = await userService.CreateRoleAsync(roleDTO);               
+                var result = await roleService.CreateRoleAsync(roleDTO);               
                 if (result.Succeeded)
                     return RedirectToAction("RolesList");
                 else                  
@@ -39,10 +40,10 @@ namespace MyShopApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteRoles(string id)
         {
-            RoleDTO? roleDTO = await userService.GetRoleAsync(id);
+            RoleDTO? roleDTO = await roleService.GetRoleAsync(id);
             if(roleDTO != null) 
             {
-               var result = await userService.DeleteRoleAsync(roleDTO);
+               var result = await roleService.DeleteRoleAsync(roleDTO);
                 if (result.Succeeded)
                     return RedirectToAction("RolesList");
                 else
@@ -56,8 +57,8 @@ namespace MyShopApp.Web.Controllers
             UserDTO? userDTO = await userService.GetUserAsync(userId);           
             if(userDTO!= null)
             {
-                var userRoles = await userService.GetUserRolesAsync(userDTO);
-                var allRoles = userService.GetRoles();
+                var userRoles = await roleService.GetUserRolesAsync(userDTO);
+                var allRoles = roleService.GetRoles();
                 ChangeRoleViewModel model = new ChangeRoleViewModel
                 {
                     UserId = userDTO.Id,
@@ -75,14 +76,14 @@ namespace MyShopApp.Web.Controllers
             UserDTO? userDTO = await userService.GetUserAsync(userId);
             if(userDTO!= null)
             {
-                var userRoles = await userService.GetUserRolesAsync(userDTO);
-                var allRoles = userService.GetRoles();
+                var userRoles = await roleService.GetUserRolesAsync(userDTO);
+                var allRoles = roleService.GetRoles();
                 var addedRoles = roles.Except(userRoles);
                 var removedRoles = userRoles.Except(roles);
 
-                await userService.AddToRolesAsync(userDTO, addedRoles);
+                await roleService.AddToRolesAsync(userDTO, addedRoles);
 
-                await userService.RemoveFromRolesAsync(userDTO, removedRoles);
+                await roleService.RemoveFromRolesAsync(userDTO, removedRoles);
 
                 return RedirectToAction("UserList", "Users");
             }

@@ -2,19 +2,19 @@
 using MyShopApp.Web.Models;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.BLL.DTO;
-using MyShopApp.BLL.Infrastructure;
 
 namespace MyShopApp.Web.Controllers
 {
     public class AccountController : Controller
     {
         
-        IUserService userService;              
+        IUserService userService;      
 
         public AccountController(IUserService _userService)
         {
-            userService = _userService;            
+            userService = _userService;             
         }
+
 
         [HttpGet]
         public IActionResult Register() => View();
@@ -32,17 +32,11 @@ namespace MyShopApp.Web.Controllers
                     Address = model.Address, 
                     Year = model.Year,
                     //Role = "user"
-                };
-                if (userService.GetRoles().FirstOrDefault().RoleName == "user")
-                    await userService.AddToRoleAsync(userDTO, "user");
-                else
-                {
-                    await userService.CreateRoleAsync(new RoleDTO { RoleName = "user" });
-                    await userService.AddToRoleAsync(userDTO, "user");
-                }
+                };    
+                
                 var result = await userService.CreateUserAsync(userDTO);
                 if(result.Succeeded)
-                {
+                {                   
                     await userService.SignIn(userDTO, false);//устанавливаются аутентификационные куки
                     return RedirectToAction("HomePage", "Home");
                 }

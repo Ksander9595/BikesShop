@@ -35,67 +35,7 @@ namespace MyShopApp.BLL.Service
         {            
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<User, UserDTO>()).CreateMapper();
             return mapper.Map<IEnumerable<User>, List<UserDTO>>(Database.UserManager.Users);
-        }
-
-        public async Task<RoleDTO> GetRoleAsync(string Id)
-        {
-            IdentityRole? role = await Database.RoleManager.FindByIdAsync(Id);
-            return new RoleDTO
-            {
-                RoleId = role.Id,
-                RoleName = role.Name
-            };
-        }
-
-        public IEnumerable<RoleDTO> GetRoles()
-        {
-            //var mapper = new MapperConfiguration(cfg => cfg.CreateMap<IdentityRole, RoleDTO>()).CreateMapper();
-            //return mapper.Map<IEnumerable<IdentityRole>, List<RoleDTO>>(Database.RoleManager.Roles);
-            var roles = Database.RoleManager.Roles.ToList();
-            var rolesDTO = new List<RoleDTO>();
-            foreach (var role in roles)
-            {
-                RoleDTO roleDTO = new RoleDTO();
-                roleDTO.RoleId = role.Id;
-                roleDTO.RoleName = role.Name;
-                rolesDTO.Add(roleDTO);
-            }
-            return rolesDTO;
-        }
-
-        public async Task<OperationDetails> CreateRoleAsync(RoleDTO roleDTO)
-        {
-            Role? role = await Database.RoleManager.FindByNameAsync(roleDTO.RoleName);
-            if(role == null)
-            {
-                role = new Role { Name = roleDTO.RoleName };
-                var result = await Database.RoleManager.CreateAsync(role);
-                if (result.Errors.Count() > 0)
-                    return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
-                await Database.SaveAsync();
-                return new OperationDetails(true, "Registration role successful", "");
-            }
-            else
-            {
-                return new OperationDetails(false, "This role already exist", "Role");
-            }           
-        }
-        public async Task<OperationDetails> DeleteRoleAsync(RoleDTO roleDTO)
-        {
-            Role? role = await Database.RoleManager.FindByNameAsync(roleDTO.RoleName);
-            if(role == null)
-            {
-                var result = await Database.RoleManager.DeleteAsync(role);
-                if (result.Errors.Count() > 0)
-                    return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
-                await Database.SaveAsync();
-                return new OperationDetails(true, "Deleted role successful", "");
-            }
-            else
-            {
-                return new OperationDetails(false, "Deleted role error", "Role");
-            }           
-        }
+        }     
 
         public async Task<OperationDetails> CreateUserAsync(UserDTO userDTO)
         {
@@ -106,7 +46,9 @@ namespace MyShopApp.BLL.Service
                 var result = await Database.UserManager.CreateAsync(user, userDTO.Password);
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
-                //await Database.UserManager.AddToRoleAsync(user, userDTO.Role);
+
+                    await Database.UserManager.AddToRoleAsync(user, "user");
+                
                 ClientProfile clientProfile = new ClientProfile { Id = user.Id, Address = userDTO.Address, Name = userDTO.Name };
                 await Database.ClientManager.CreateAsync(clientProfile);
                 await Database.SaveAsync();
@@ -132,11 +74,8 @@ namespace MyShopApp.BLL.Service
                 await Database.SaveAsync();
                 return new OperationDetails(true, "Updated successful", "");
             }
-            else
-            {
-                return new OperationDetails(false, "Updated error", "Email");
-            }
-            
+            else            
+                return new OperationDetails(false, "Updated error", "Email");            
         }
 
         public async Task<OperationDetails> DeleteUserAsync(string Id)
@@ -171,67 +110,11 @@ namespace MyShopApp.BLL.Service
             {
                 return new OperationDetails(false, "Password change error", "Email");
             }
-        }
-
-        public async Task<IList<string>> GetUserRolesAsync(UserDTO userDTO)
-        {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
-            return await Database.UserManager.GetRolesAsync(user);
-        }
-
-        public async Task<OperationDetails> AddToRolesAsync(UserDTO userDTO, IEnumerable<string> addedRoles)
-        {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
-            if( user != null )
-            {
-                var result = await Database.UserManager.AddToRolesAsync(user, addedRoles);              
-                if (result.Errors.Count() > 0)
-                    return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
-                await Database.SaveAsync();
-                return new OperationDetails(true, "Roles added successful", "");
-            }
-            else
-            {
-                return new OperationDetails(false, "Roles added error", "Role");
-            }    
-        }
-        public async Task<OperationDetails> AddToRoleAsync(UserDTO userDTO, string role)
-        {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
-            if (user != null)
-            {
-                var result = await Database.UserManager.AddToRoleAsync(user, role);
-                if (result.Errors.Count() > 0)
-                    return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
-                await Database.SaveAsync();
-                return new OperationDetails(true, "Role added successful", "");
-            }
-            else
-            {
-                return new OperationDetails(false, "Role added error", "Role");
-            }
-        }
-
-        public async Task<OperationDetails> RemoveFromRolesAsync(UserDTO userDTO, IEnumerable<string> removeRoles)
-        {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
-            if(user != null )
-            {
-                var result = await Database.UserManager.RemoveFromRolesAsync(user, removeRoles);
-                if (result.Errors.Count() > 0)
-                    return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
-                await Database.SaveAsync();
-                return new OperationDetails(true, "Roles remove successful", "");
-            }
-            else
-            {
-                return new OperationDetails(false, "Roles remove error", "Role");
-            }            
-        }
+        }        
 
         public async Task SignIn(UserDTO userDTO, bool value)
         {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
+            User? user = await Database.UserManager.FindByEmailAsync(userDTO.Email);
             await Database.SignInManager.SignInAsync(user, value);
         }
 
@@ -242,7 +125,6 @@ namespace MyShopApp.BLL.Service
                 return new OperationDetails(true, "User sign in successful", "");
             else
                 return new OperationDetails(false, "User sign in error", "Email");
-
         }
 
         public async Task SignOutAsync()

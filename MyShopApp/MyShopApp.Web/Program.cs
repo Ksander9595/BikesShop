@@ -3,6 +3,7 @@ using MyShopApp.BLL.Interfaces;
 using MyShopApp.BLL.Service;
 using MyShopApp.DAL.EF;
 using MyShopApp.DAL.EF.Entities;
+using MyShopApp.DAL.Identity;
 using MyShopApp.DAL.Interfaces;
 using MyShopApp.DAL.Repositories;
 
@@ -15,11 +16,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddScoped<IRoleService, RoleService>();
-//builder.Services.AddScoped<ISignInService, SignInService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUnitOfWork, EFUnitOfWorks>();
 builder.Services.AddScoped<IClientManager, ClientManager>();
 builder.Services.AddScoped<IidentityUnitOfWork, IdentityUnitOfWork>();
+
 
 
 

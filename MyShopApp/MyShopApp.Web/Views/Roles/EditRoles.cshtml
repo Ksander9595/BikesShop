@@ -3,7 +3,7 @@
 
 <h4>Edit roles for user @Model.UserEmail</h4>
 
-<form asp-action="Edit" method="post">
+<form asp-action="EditRoles" method="post">
     <input type="hidden" name="userId" value="@Model.UserId"/>
     <div class="form-group">
         @foreach (RoleDTO role in Model.AllRoles)
