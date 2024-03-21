@@ -10,12 +10,11 @@
 </head>
 <body style="background-color:dimgray">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-controller="Home" asp-action="HomePage">Bikes Store</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
+        <div class="container-fluid">           
+            <a class="navbar-brand" asp-controller="Home" asp-action="HomePage">
+                <img src="/LogoPageImage/logo.jpg" width="30" height="30" class="d-inline-block align-top"> 
+                RIDER            
+           </a>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
@@ -57,7 +56,7 @@
                 @RenderBody()
                 <hr />
                 <footer>
-                    <p>© @DateTime.Now.Year -  Motocycle Store</p>
+                    <p>© @DateTime.Now.Year -  "RIDER" Bikes Store</p>
                 </footer>
             </div>
             <div class="col">
