@@ -7,10 +7,16 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-6">
+            <a class="rounded" asp-controller="Home" asp-action="HomePage">
+                <img src="/LogoPageImage/logo.jpg" width="60" height="60" class="rounded" alt="">
+            </a>           
+            <p></p>
             <table class="table table-responsive">
             <form class="text-center" method="post" asp-controller="Account" asp-action="Register">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <h2>Sign up to Bikes Shop</h2>
+            <div class="card border-dark text-black bg-secondary mb-3" style="width: 26rem;">
+            <div class="card-body">
             <div>
                 <label asp-for="Email">Email adderss</label><br />
                 <input asp-for="Email" />
@@ -22,13 +28,21 @@
                 <span asp-validation-for="Year"></span>
             </div>
             <div>
-                <label asp-for="Address"></label><br />
+                <label asp-for="Address">City</label><br />
                 <input asp-for="Address" />
                 <span asp-validation-for="Address"></span>
             </div>
             <div>
+                <label asp-for="Zip">Zip</label><br />
+                <input asp-for="Zip" />
+                <span asp-validation-for="Zip"></span>
+            </div>
+            <div>
             <label asp-for="Password"></label><br />
-            <input asp-for="Password" />
+            <input type="password" asp-for="Password" aria-describedby="passwordHelpInline"/>
+            <small id="passwordHelpInline" class="text-black">
+                   Must be 8-20 characters long.
+            </small>
             <span asp-validation-for="Password"></span>
             </div>
             <div>
@@ -36,8 +50,11 @@
             <input asp-for="ConfirmPassword" />
             <span asp-validation-for="ConfirmPassword"></span>
             </div>
+            <p></p>
             <div>
-                <button type="submit" class="btn btn-dark mb-2">Registration</button>
+                <button type="submit" class="btn btn-success mb-2 text-white">Registration</button>
+            </div>
+            </div>
             </div>
             </form>
             </table>

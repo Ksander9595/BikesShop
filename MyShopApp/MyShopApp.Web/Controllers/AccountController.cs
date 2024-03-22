@@ -31,7 +31,7 @@ namespace MyShopApp.Web.Controllers
                     Password = model.Password, 
                     Address = model.Address, 
                     Year = model.Year,
-                    //Role = "user"
+                    Zip = model.Zip
                 };    
                 
                 var result = await userService.CreateUserAsync(userDTO);

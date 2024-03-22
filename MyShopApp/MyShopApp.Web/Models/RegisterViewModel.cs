@@ -18,6 +18,10 @@ namespace MyShopApp.Web.Models
         public string? Address { get; set; }
 
         [Required]
+        [Display(Name = "Zip")]
+        public string? Zip { get; set; }
+
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string? Password { get; set; }      

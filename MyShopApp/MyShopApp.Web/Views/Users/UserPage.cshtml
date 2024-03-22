@@ -1,5 +1,9 @@
 ﻿
-<p>@User.Identity.Name</p>
+<a class="text-white">@User.Identity.Name</a>
+<a class="text-white">
+    <h3>Cart:</h3>
+</a>
+<p class="text-white">Your cart is empty, try adding the product again.</p>
 
 <form method="post" asp-controller="Account" asp-action="Logout">
     <input type="submit" class="btn btn-dark my-2 my-sm-0" value="Exit" />
