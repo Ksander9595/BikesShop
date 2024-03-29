@@ -127,5 +127,11 @@ namespace MyShopApp.Web.Controllers
             }
             return View(model);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            userService.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

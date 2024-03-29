@@ -7,6 +7,6 @@ namespace MyShopApp.BLL.Interfaces
         Task MakeOrder(OrderDTO orderDto);//Task
         Task<MotorcycleDTO> GetMotorcycleAsync(int? id);//Task
         IEnumerable<MotorcycleDTO> GetMotorcycles();//Task
-        
+        IEnumerable<OrderDTO> GetOrders();
     }
 }

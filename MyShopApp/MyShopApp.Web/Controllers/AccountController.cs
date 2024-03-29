@@ -2,6 +2,7 @@
 using MyShopApp.Web.Models;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.BLL.DTO;
+using MyShopApp.BLL.Service;
 
 namespace MyShopApp.Web.Controllers
 {
@@ -85,6 +86,12 @@ namespace MyShopApp.Web.Controllers
         {
             await userService.SignOutAsync();//удаляет аутентификационные куки
             return RedirectToAction("HomePage", "Home");
-        }                    
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            userService.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

@@ -159,21 +159,7 @@ namespace MyShopApp.BLL.Service
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        private bool disposed = false;
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    Database.Dispose();
-                }
-                this.disposed = true;
-            }
+            Database.Dispose();
         }
     }
 

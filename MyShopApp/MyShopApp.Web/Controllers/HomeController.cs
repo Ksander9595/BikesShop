@@ -22,6 +22,7 @@ namespace MyShopApp.Web.Controllers
         {
             return View();
         }
+
         public IActionResult Index()
         {          
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<MotorcycleDTO, MotorcycleViewModel>()).CreateMapper();
@@ -29,14 +30,22 @@ namespace MyShopApp.Web.Controllers
             return View(motorcycles);
         }
 
-        public async Task<IActionResult> MakeOrder(int? id)
+        public IActionResult OrdersList()
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, OrderViewModel>()).CreateMapper();
+            var motorcycles = mapper.Map<IEnumerable<OrderDTO>, List<OrderViewModel>>(orderService.GetOrders());
+            return View(motorcycles);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MakeOrder(int id)
         {
             if (User.Identity.IsAuthenticated)
             {
                 try
                 {
                     MotorcycleDTO motorcycle = await orderService.GetMotorcycleAsync(id);
-                    var order = new OrderViewModel { MotorcycleID = motorcycle.Id };
+                    var order = new OrderViewModel { MotorcycleID = motorcycle.Id, Date = DateTime.Now };
 
                     return View(order);
                 }
@@ -48,22 +57,27 @@ namespace MyShopApp.Web.Controllers
             }
             else
             {
-                return Content("<h2>Add to card need registration</h2>");
+                return RedirectToAction("Login", "Account");
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> MakeOrder(OrderViewModel order)
-        {           
+        {
+            if (ModelState.IsValid)
+            {
                 try
                 {
                     var orderDto = new OrderDTO
                     {
                         MotorcycleID = order.MotorcycleID,
-                        FirstName = order.FirstName,
-                        SecondName = order.SecondName,
+                        //FirstName = order.FirstName,
+                        //SecondName = order.SecondName,
                         PhoneNumber = order.PhoneNumber,
                         Address = order.Address,
-                        Date = order.Date
+                        Date = order.Date,
+                        UserName = User.Identity.Name
+                        
                     };
                     await orderService.MakeOrder(orderDto);
                     return Content("<h2>Your order successfully completed<h2>");
@@ -72,13 +86,16 @@ namespace MyShopApp.Web.Controllers
                 {
                     ModelState.AddModelError(ex.Property, ex.Message);
                 }
+            }
                 return View(order);           
         }
+
         protected override void Dispose(bool disposing)
         {
             orderService.Dispose();
             base.Dispose(disposing);
         }
+
 
 
     }

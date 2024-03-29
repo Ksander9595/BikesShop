@@ -26,12 +26,13 @@ namespace MyShopApp.BLL.Service
             {
                 throw new ValidationException("Motorcycle not found", "");
             }
-            decimal sum = new Discount(0.1m).GetDiscountedPrice(motorcycle.Price);
+            //decimal sum = new Discount(0.1m).GetDiscountedPrice(motorcycle.Price);
+            decimal sum = motorcycle.Price;
             Order order = new Order
             {
                 Date = DateTime.Now,
                 Address = orderDto.Address,
-                MotorcycleId = motorcycle.Id,
+                //Motorcycles = motorcycle.Id,
                 Sum = sum,
                 PhoneNumber = orderDto.PhoneNumber
             };
@@ -45,6 +46,12 @@ namespace MyShopApp.BLL.Service
             return mapper.Map<IEnumerable<Motorcycle>, List<MotorcycleDTO>>(Database.Motorcycles.GetAll());
         }
 
+        public IEnumerable<OrderDTO> GetOrders()
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Order>, List<OrderDTO>>(Database.Orders.GetAll());
+        }
+
         public async Task<MotorcycleDTO> GetMotorcycleAsync(int? id)
         {           
             if (id == null)
@@ -55,6 +62,7 @@ namespace MyShopApp.BLL.Service
 
             return new MotorcycleDTO
             {
+                Id = motorcycle.Id,
                 Name = motorcycle.Name,
                 Model = motorcycle.Model,
                 Description = motorcycle.Description,

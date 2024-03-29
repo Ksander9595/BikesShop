@@ -21,11 +21,17 @@
                 <label asp-for="Email">Email adderss</label><br />
                 <input asp-for="Email" />
                 <span asp-validation-for="Email"></span>
+            </div>            
+            <div>
+                <label asp-for="Date"></label><br />
+                <input asp-for="Date" type="date" id="date" />
+                <span asp-validation-for="Date"></span>
             </div>
             <div>
-                <label asp-for="Year"></label><br />
-                <input asp-for="Year" />
-                <span asp-validation-for="Year"></span>
+                <label asp-for="PhoneNumber"></label><br />
+                <input asp-for="PhoneNumber" type="tel" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                 placeholder="+(000)-000-0000" required />
+                <span asp-validation-for="PhoneNumber"></span>
             </div>
             <div>
                 <label asp-for="Address">City</label><br />
@@ -50,6 +56,8 @@
             <input asp-for="ConfirmPassword" />
             <span asp-validation-for="ConfirmPassword"></span>
             </div>
+            <p></p>
+            <a class="text-dark" asp-action="Login" asp-controller="Account">Sign In?</a> 
             <p></p>
             <div>
                 <button type="submit" class="btn btn-success mb-2 text-white">Registration</button>

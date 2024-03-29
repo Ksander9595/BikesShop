@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShopApp.Web", "MyShopApp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShopApp.DAL", "MyShopApp.DAL\MyShopApp.DAL.csproj", "{A7EFD060-0153-4758-A8BC-53BFDB4FB2B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyShopApp.BLL", "MyShopApp.BLL\MyShopApp.BLL.csproj", "{DC6876AA-D7E2-4E11-AA05-D654E967AA22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShopApp.BLL", "MyShopApp.BLL\MyShopApp.BLL.csproj", "{DC6876AA-D7E2-4E11-AA05-D654E967AA22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -14,6 +14,14 @@ namespace MyShopApp.Web.Models
         public int Year { get; set; }
 
         [Required]
+        [Display(Name = "Date")]
+        public int Date { get; set; }
+
+        [Required]
+        [Display(Name = "PhoneNumber")]
+        public int PhoneNumber { get; set; }
+
+        [Required]
         [Display(Name = "Address")]
         public string? Address { get; set; }
 

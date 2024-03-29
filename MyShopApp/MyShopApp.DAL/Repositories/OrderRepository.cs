@@ -14,11 +14,11 @@ namespace MyShopApp.DAL.Repositories
         }
         public IEnumerable<Order> GetAll()
         {            
-            return db.Orders.Include(o=>o.motorcycle);            
+            return db.Orders.Include(o=>o.Motorcycles);            
         }
         public async Task<Order> GetAsync(int id)
         {
-            return await db.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
+            return await db.Orders.FirstOrDefaultAsync(o => o.Id == id);
             
         }
         public async Task CreateAsync(Order order)
@@ -33,14 +33,14 @@ namespace MyShopApp.DAL.Repositories
         {
             if (id != null)
             {
-                Order? order = await db.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
+                Order? order = await db.Orders.FirstOrDefaultAsync(o => o.Id == id);
                 db.Orders.Remove(order);
             }           
         }
         public IEnumerable<Order> Find(Func<Order, Boolean> predicate)
         {
             return db.Orders
-                .Include(o=>o.motorcycle)
+                .Include(o=>o.Motorcycles)
                 .Where(predicate)
                 .ToList();
             

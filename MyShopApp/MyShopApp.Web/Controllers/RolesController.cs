@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyShopApp.BLL.DTO;
 using MyShopApp.BLL.Interfaces;
-
 using MyShopApp.Web.Models;
 
 namespace MyShopApp.Web.Controllers
@@ -88,6 +87,13 @@ namespace MyShopApp.Web.Controllers
                 return RedirectToAction("UserList", "Users");
             }
             return NotFound();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            userService.Dispose();
+            roleService.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

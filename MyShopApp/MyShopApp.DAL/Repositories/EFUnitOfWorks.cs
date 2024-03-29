@@ -37,9 +37,9 @@ namespace MyShopApp.DAL.Repositories
         public async Task SaveAsync()
         {
             await db.SaveChangesAsync();
-        }
-        private bool disposed = false;
+        }         
 
+        private bool disposed = false;
         public virtual void Dispose(bool disposing)
         {
             if(!this.disposed)
@@ -54,7 +54,7 @@ namespace MyShopApp.DAL.Repositories
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);    
+            GC.SuppressFinalize(this);
         }
     }
 }
