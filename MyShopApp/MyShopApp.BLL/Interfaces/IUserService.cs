@@ -5,7 +5,8 @@ namespace MyShopApp.BLL.Interfaces
 {
     public interface IUserService : IDisposable
     {
-        Task<UserDTO> GetUserAsync(string Id);
+        Task<UserDTO> GetUserIdAsync(string Id);
+        Task<UserDTO> GetUserNameAsync(string UserName);
         IEnumerable<UserDTO> GetUsers();              
         Task<OperationDetails> CreateUserAsync(UserDTO userDTO);
         Task<OperationDetails> UpdateUserAsync(UserDTO userDTO);

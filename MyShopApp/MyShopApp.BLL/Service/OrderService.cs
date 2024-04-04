@@ -4,7 +4,6 @@ using MyShopApp.BLL.Interfaces;
 using MyShopApp.DAL.EF.Entities;
 using MyShopApp.DAL.Interfaces;
 using MyShopApp.BLL.Infrastructure;
-using MyShopApp.BLL.BusinessModel;
 using AutoMapper;
 
 
@@ -13,28 +12,29 @@ namespace MyShopApp.BLL.Service
     public class OrderService : IOrderService//GetMotorcyclesAsync
     {
         IUnitOfWork Database;
+        IidentityUnitOfWork IdentityDatabase;//????
 
-        public OrderService(IUnitOfWork uow)
+        public OrderService(IUnitOfWork uow, IidentityUnitOfWork iuow)
         {
             Database = uow;
+            IdentityDatabase = iuow;
         }
-        public async Task MakeOrder(OrderDTO orderDto)
+        public async Task MakeOrderAsync(OrderDTO orderDto)
         {
-            var motorcycle = await Database.Motorcycles.GetAsync(orderDto.MotorcycleID);            
+            var motorcycle = await Database.Motorcycles.GetAsync(orderDto.MotorcycleId);            
            
             if (motorcycle == null)
             {
                 throw new ValidationException("Motorcycle not found", "");
             }
-            //decimal sum = new Discount(0.1m).GetDiscountedPrice(motorcycle.Price);
-            decimal sum = motorcycle.Price;
+            
             Order order = new Order
             {
-                Date = DateTime.Now,
-                Address = orderDto.Address,
-                //Motorcycles = motorcycle.Id,
-                Sum = sum,
-                PhoneNumber = orderDto.PhoneNumber
+                
+                UserId = orderDto.UserId,
+                Date = orderDto.Date,
+                MotorcycleId = motorcycle.Id,
+                Sum = orderDto.Sum,
             };
             await Database.Orders.CreateAsync(order);
             await Database.SaveAsync();
@@ -46,10 +46,27 @@ namespace MyShopApp.BLL.Service
             return mapper.Map<IEnumerable<Motorcycle>, List<MotorcycleDTO>>(Database.Motorcycles.GetAll());
         }
 
-        public IEnumerable<OrderDTO> GetOrders()
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Order>, List<OrderDTO>>(Database.Orders.GetAll());
+        public async Task<IEnumerable<OrderDTO>> GetOrdersAsync()//отношение многие ко многим?
+        {                     
+            var ordersDTO = new List<OrderDTO>();
+            foreach(var order in Database.Orders.GetAll()) 
+            {
+                var user = await IdentityDatabase.UserManager.FindByIdAsync(order.UserId);
+                var motorcycle = await Database.Motorcycles.GetAsync(order.MotorcycleId);
+                var orderDTO = new OrderDTO
+                {
+                    UserName = user.UserName,
+                    PhoneNumber = user.PhoneNumber,
+                    Address = user.Address,
+                    Zip = user.Zip,
+                    MotorcycleName = motorcycle.Name,
+                    MotorcycleModel = motorcycle.Model,
+                    Sum = order.Sum,
+                    Date = order.Date
+                };
+                ordersDTO.Add(orderDTO);
+            }
+            return ordersDTO;
         }
 
         public async Task<MotorcycleDTO> GetMotorcycleAsync(int? id)

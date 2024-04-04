@@ -26,7 +26,7 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDTO userDTO = new UserDTO { Email = model.Email, Name = model.Email, Year = model.Year, Password = model.Password };               
+                UserDTO userDTO = new UserDTO { Email = model.Email, Name = model.Email, DateOfBirth = model.DateOfBirth, Password = model.Password };               
                 var result = await userService.CreateUserAsync(userDTO);               
                 if(result.Succeeded)
                 {
@@ -41,12 +41,12 @@ namespace MyShopApp.Web.Controllers
         }
         public async Task<IActionResult> Edit(string id)
         {
-            UserDTO userDTO = await userService.GetUserAsync(id);
+            UserDTO userDTO = await userService.GetUserIdAsync(id);
             if(userDTO == null)
             {
                 return NotFound();
             }
-            EditUserViewModel model = new EditUserViewModel { Id = userDTO.Id, Email = userDTO.Email, Year = userDTO.Year };
+            EditUserViewModel model = new EditUserViewModel { Id = userDTO.Id, Email = userDTO.Email, DateOfBirth = userDTO.DateOfBirth };
             return View(model);
         }
         
@@ -55,12 +55,12 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDTO? userDTO = await userService.GetUserAsync(model.Id);
+                UserDTO? userDTO = await userService.GetUserIdAsync(model.Id);
                 if(userDTO!=null)
                 {
                     userDTO.Email = model.Email;
                     userDTO.Name = model.Email;
-                    userDTO.Year = model.Year;
+                    userDTO.DateOfBirth = model.DateOfBirth;
 
                     var result = await userService.UpdateUserAsync(userDTO);
                     if(result.Succeeded)
@@ -93,7 +93,7 @@ namespace MyShopApp.Web.Controllers
 
         public async Task<IActionResult> ChangePassword(string Id)
         {
-            UserDTO userDTO = await userService.GetUserAsync(Id);
+            UserDTO userDTO = await userService.GetUserIdAsync(Id);
             if(userDTO==null )
             {
                 return NotFound();
@@ -107,7 +107,7 @@ namespace MyShopApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDTO? userDTO = await userService.GetUserAsync(model.Id); 
+                UserDTO? userDTO = await userService.GetUserIdAsync(model.Id); 
                 if(userDTO!=null)
                 {
                     var result = await userService.ChangePasswordAsync(userDTO, model.OldPassword, model.NewPassword);

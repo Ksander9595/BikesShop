@@ -53,7 +53,7 @@ namespace MyShopApp.Web.Controllers
 
         public async Task<IActionResult> EditRoles(string userId)
         {
-            UserDTO? userDTO = await userService.GetUserAsync(userId);           
+            UserDTO? userDTO = await userService.GetUserIdAsync(userId);           
             if(userDTO!= null)
             {
                 var userRoles = await roleService.GetUserRolesAsync(userDTO);
@@ -72,7 +72,7 @@ namespace MyShopApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditRoles(string userId, List<string> roles)
         {
-            UserDTO? userDTO = await userService.GetUserAsync(userId);
+            UserDTO? userDTO = await userService.GetUserIdAsync(userId);
             if(userDTO!= null)
             {
                 var userRoles = await roleService.GetUserRolesAsync(userDTO);

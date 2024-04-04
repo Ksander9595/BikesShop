@@ -19,7 +19,7 @@ namespace MyShopApp.BLL.Service
             Database = db;
         }
       
-        public async Task<UserDTO> GetUserAsync(string Id)
+        public async Task<UserDTO> GetUserIdAsync(string Id)
         {
             User? user = await Database.UserManager.FindByIdAsync(Id);
 
@@ -27,9 +27,25 @@ namespace MyShopApp.BLL.Service
                 Id = user.Id,
                 Email = user.Email,
                 Name = user.Email,
-                Year = user.Year               
+                DateOfBirth = user.DateOfBirth               
             };                       
         }  
+
+        public async Task<UserDTO> GetUserNameAsync(string Name)
+        {
+            User? user = await Database.UserManager.FindByEmailAsync(Name);
+
+            return new UserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Email,
+                DateOfBirth = user.DateOfBirth,
+                Zip = user.Zip,
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address
+            };
+        }
         
         public IEnumerable<UserDTO> GetUsers()
         {            
@@ -42,7 +58,15 @@ namespace MyShopApp.BLL.Service
             User? user = await Database.UserManager.FindByEmailAsync(userDTO.Email);
             if (user == null)
             {                
-                user = new User { Email = userDTO.Email, UserName = userDTO.Email, Year = userDTO.Year };
+                user = new User 
+                { 
+                    Email = userDTO.Email, 
+                    UserName = userDTO.Email,
+                    DateOfBirth = userDTO.DateOfBirth, 
+                    Address = userDTO.Address, 
+                    PhoneNumber = userDTO.PhoneNumber, 
+                    Zip = userDTO.Zip 
+                };
                 var result = await Database.UserManager.CreateAsync(user, userDTO.Password);
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");
@@ -67,7 +91,10 @@ namespace MyShopApp.BLL.Service
             {
                 user.Email = userDTO.Email;
                 user.UserName = userDTO.Email;
-                user.Year = userDTO.Year;
+                user.DateOfBirth = userDTO.DateOfBirth;
+                user.Zip = userDTO.Zip;
+                user.Address = userDTO.Address;
+                user.DateOfBirth = userDTO.DateOfBirth;
                 var result = await Database.UserManager.UpdateAsync(user);
                 if (result.Errors.Count() > 0)
                     return new OperationDetails(false, result.Errors.FirstOrDefault().ToString(), "");

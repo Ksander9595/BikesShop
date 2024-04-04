@@ -18,19 +18,18 @@
             <div class="card border-dark text-black bg-secondary mb-3" style="width: 26rem;">
             <div class="card-body">
             <div>
-                <label asp-for="Email">Email adderss</label><br />
+                <label asp-for="Email">Email address</label><br />
                 <input asp-for="Email" />
                 <span asp-validation-for="Email"></span>
             </div>            
             <div>
-                <label asp-for="Date"></label><br />
-                <input asp-for="Date" type="date" id="date" />
-                <span asp-validation-for="Date"></span>
+                <label asp-for="DateOfBirth"></label><br />
+                <input asp-for="DateOfBirth" type="date" id="date" />
+                <span asp-validation-for="DateOfBirth"></span>
             </div>
             <div>
                 <label asp-for="PhoneNumber"></label><br />
-                <input asp-for="PhoneNumber" type="tel" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                 placeholder="+(000)-000-0000" required />
+                <input asp-for="PhoneNumber" placeholder="+7" pattern="[0-9]{10}"/>
                 <span asp-validation-for="PhoneNumber"></span>
             </div>
             <div>

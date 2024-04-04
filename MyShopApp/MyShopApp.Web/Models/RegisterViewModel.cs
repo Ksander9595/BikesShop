@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.VisualBasic;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 
 namespace MyShopApp.Web.Models
@@ -7,19 +8,15 @@ namespace MyShopApp.Web.Models
     {
         [Required]
         [Display(Name = "Email")]
-        public string? Email { get; set; }
+        public string? Email { get; set; }       
 
         [Required]
-        [Display(Name = "Year")]
-        public int Year { get; set; }
+        [Display(Name = "DateOfBirth")]
+        public DateOnly DateOfBirth { get; set; }
 
         [Required]
-        [Display(Name = "Date")]
-        public int Date { get; set; }
-
-        [Required]
-        [Display(Name = "PhoneNumber")]
-        public int PhoneNumber { get; set; }
+        [Display(Name = "Phone")]
+        public string? PhoneNumber { get; set; }
 
         [Required]
         [Display(Name = "Address")]

@@ -30,9 +30,10 @@ namespace MyShopApp.Web.Controllers
                     Email = model.Email, 
                     Name = model.Email, 
                     Password = model.Password, 
-                    Address = model.Address, 
-                    Year = model.Year,
-                    Zip = model.Zip
+                    Address = model.Address,                    
+                    Zip = model.Zip,
+                    PhoneNumber = model.PhoneNumber,
+                    DateOfBirth = model.DateOfBirth
                 };    
                 
                 var result = await userService.CreateUserAsync(userDTO);
