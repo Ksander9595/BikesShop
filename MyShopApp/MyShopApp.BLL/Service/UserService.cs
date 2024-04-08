@@ -19,9 +19,9 @@ namespace MyShopApp.BLL.Service
             Database = db;
         }
       
-        public async Task<UserDTO> GetUserIdAsync(string Id)
+        public async Task<UserDTO> GetUserIdAsync(int Id)
         {
-            User? user = await Database.UserManager.FindByIdAsync(Id);
+            User? user = await Database.UserManager.FindByIdAsync(Id.ToString());
 
             return new UserDTO {
                 Id = user.Id,
@@ -86,7 +86,7 @@ namespace MyShopApp.BLL.Service
         
         public async Task<OperationDetails> UpdateUserAsync(UserDTO userDTO)
         {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
+            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id.ToString());
             if(user != null)
             {
                 user.Email = userDTO.Email;
@@ -105,9 +105,9 @@ namespace MyShopApp.BLL.Service
                 return new OperationDetails(false, "Updated error", "Email");            
         }
 
-        public async Task<OperationDetails> DeleteUserAsync(string Id)
-        {
-            User? user = await Database.UserManager.FindByIdAsync(Id); 
+        public async Task<OperationDetails> DeleteUserAsync(int Id)
+        {            
+            User? user = await Database.UserManager.FindByIdAsync(Id.ToString()); 
             if( user != null )
             {
                 var result = await Database.UserManager.DeleteAsync(user);
@@ -123,8 +123,8 @@ namespace MyShopApp.BLL.Service
         }
 
         public async Task<OperationDetails> ChangePasswordAsync(UserDTO userDTO, string oldPass, string newPass)
-        {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
+        {            
+            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id.ToString());
             if(user != null )
             {
                 var result = await Database.UserManager.ChangePasswordAsync(user, oldPass, newPass);

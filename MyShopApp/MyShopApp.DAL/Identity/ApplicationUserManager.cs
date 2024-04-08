@@ -17,5 +17,10 @@ namespace MyShopApp.DAL.Identity
         IdentityErrorDescriber errors,
         IServiceProvider services,
         ILogger<UserManager<User>> logger) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger) { }
+
+        //public Task<User> FindByIdAsync(int Id)//??
+        //{
+        //    return base.FindByIdAsync(Id.ToString());
+        //}
     }
 }

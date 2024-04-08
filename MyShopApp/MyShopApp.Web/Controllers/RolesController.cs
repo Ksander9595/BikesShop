@@ -37,7 +37,7 @@ namespace MyShopApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteRoles(string id)
+        public async Task<IActionResult> DeleteRoles(int id)
         {
             RoleDTO? roleDTO = await roleService.GetRoleAsync(id);
             if(roleDTO != null) 
@@ -51,7 +51,7 @@ namespace MyShopApp.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> EditRoles(string userId)
+        public async Task<IActionResult> EditRoles(int userId)
         {
             UserDTO? userDTO = await userService.GetUserIdAsync(userId);           
             if(userDTO!= null)
@@ -70,7 +70,7 @@ namespace MyShopApp.Web.Controllers
             return NotFound();
         }
         [HttpPost]
-        public async Task<IActionResult> EditRoles(string userId, List<string> roles)
+        public async Task<IActionResult> EditRoles(int userId, List<string> roles)
         {
             UserDTO? userDTO = await userService.GetUserIdAsync(userId);
             if(userDTO!= null)

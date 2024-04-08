@@ -6,7 +6,7 @@ namespace MyShopApp.BLL.Interfaces
 {
     public interface IRoleService : IDisposable
     {
-        Task<RoleDTO> GetRoleAsync(string Id);
+        Task<RoleDTO> GetRoleAsync(int Id);
         IEnumerable<RoleDTO> GetRoles();
         Task<OperationDetails> CreateRoleAsync(RoleDTO roleDTO);
         Task<OperationDetails> DeleteRoleAsync(RoleDTO roleDTO);

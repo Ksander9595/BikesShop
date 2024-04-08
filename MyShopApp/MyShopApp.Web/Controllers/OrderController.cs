@@ -56,7 +56,7 @@ namespace MyShopApp.Web.Controllers
 
                     OrderDTO orderDTO = new OrderDTO
                     {
-                        MotorcycleId = motorcycleDTO.Id,
+                        ProductId = motorcycleDTO.Id,
                         UserId = userDTO.Id,
                         Sum = motorcycleDTO.Price,
                         Date = DateTime.Now,

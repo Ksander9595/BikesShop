@@ -7,7 +7,7 @@ namespace MyShopApp.DAL.EF.Entities
     {
         [Key]
         [ForeignKey("User")]//связывает класс отношениями один-к-одному
-        public string? Id {  get; set; }
+        public int Id {  get; set; }
         public string? Name { get; set; }
         public string? Address { get; set; }
 

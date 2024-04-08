@@ -21,7 +21,7 @@ namespace MyShopApp.BLL.Service
         }
         public async Task MakeOrderAsync(OrderDTO orderDto)
         {
-            var motorcycle = await Database.Motorcycles.GetAsync(orderDto.MotorcycleId);            
+            var motorcycle = await Database.Motorcycles.GetAsync(orderDto.ProductId);            
            
             if (motorcycle == null)
             {
@@ -51,7 +51,7 @@ namespace MyShopApp.BLL.Service
             var ordersDTO = new List<OrderDTO>();
             foreach(var order in Database.Orders.GetAll()) 
             {
-                var user = await IdentityDatabase.UserManager.FindByIdAsync(order.UserId);
+                var user = await IdentityDatabase.UserManager.FindByIdAsync(order.UserId.ToString());
                 var motorcycle = await Database.Motorcycles.GetAsync(order.MotorcycleId);
                 var orderDTO = new OrderDTO
                 {
@@ -69,11 +69,11 @@ namespace MyShopApp.BLL.Service
             return ordersDTO;
         }
 
-        public async Task<MotorcycleDTO> GetMotorcycleAsync(int? id)
+        public async Task<MotorcycleDTO> GetMotorcycleAsync(int id)
         {           
             if (id == null)
                 throw new ValidationException("ID motorcycle not found", "");
-            var motorcycle = await Database.Motorcycles.GetAsync(id.Value);
+            var motorcycle = await Database.Motorcycles.GetAsync(id);
             if (motorcycle == null)
                 throw new ValidationException("Motorcycle not found", "");
 

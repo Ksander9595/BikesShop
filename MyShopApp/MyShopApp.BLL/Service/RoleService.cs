@@ -35,9 +35,9 @@ namespace MyShopApp.BLL.Service
                 }
             }
         }
-        public async Task<RoleDTO> GetRoleAsync(string Id)
+        public async Task<RoleDTO> GetRoleAsync(int Id)
         {
-            IdentityRole? role = await Database.RoleManager.FindByIdAsync(Id);
+            Role? role = await Database.RoleManager.FindByIdAsync(Id.ToString());
             return new RoleDTO
             {
                 RoleId = role.Id,
@@ -96,7 +96,7 @@ namespace MyShopApp.BLL.Service
         }
         public async Task<IList<string>> GetUserRolesAsync(UserDTO userDTO)
         {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
+            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id.ToString());
             return await Database.UserManager.GetRolesAsync(user);
         }
         public async Task<RoleDTO> FindByNameAsync(string name)
@@ -109,7 +109,7 @@ namespace MyShopApp.BLL.Service
         }
         public async Task<OperationDetails> AddToRolesAsync(UserDTO userDTO, IEnumerable<string> addedRoles)
         {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
+            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id.ToString());
             if (user != null)
             {
                 var result = await Database.UserManager.AddToRolesAsync(user, addedRoles);
@@ -125,7 +125,7 @@ namespace MyShopApp.BLL.Service
         }
         public async Task<OperationDetails> AddToRoleAsync(UserDTO userDTO, string role)
         {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
+            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id.ToString());
             if (user != null)
             {
                 var result = await Database.UserManager.AddToRoleAsync(user, role);
@@ -142,7 +142,7 @@ namespace MyShopApp.BLL.Service
 
         public async Task<OperationDetails> RemoveFromRolesAsync(UserDTO userDTO, IEnumerable<string> removeRoles)
         {
-            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id);
+            User? user = await Database.UserManager.FindByIdAsync(userDTO.Id.ToString());
             if (user != null)
             {
                 var result = await Database.UserManager.RemoveFromRolesAsync(user, removeRoles);

@@ -5,8 +5,8 @@ namespace MyShopApp.Web.Models
 {
     public class ChangeRoleViewModel
     {
-        public string UserId { get; set; }
-        public string UserEmail { get; set; }
+        public int UserId { get; set; }
+        public string? UserEmail { get; set; }
         public IEnumerable<RoleDTO> AllRoles { get; set; }
         public IList<string> UserRoles { get; set; }
         public ChangeRoleViewModel()

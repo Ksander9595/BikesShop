@@ -39,7 +39,7 @@ namespace MyShopApp.Web.Controllers
             }
             return View(model);
         }
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
             UserDTO userDTO = await userService.GetUserIdAsync(id);
             if(userDTO == null)
@@ -77,7 +77,7 @@ namespace MyShopApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             var result = await userService.DeleteUserAsync(id);
             if (result.Succeeded)
@@ -91,7 +91,7 @@ namespace MyShopApp.Web.Controllers
             return View();//?
         }
 
-        public async Task<IActionResult> ChangePassword(string Id)
+        public async Task<IActionResult> ChangePassword(int Id)
         {
             UserDTO userDTO = await userService.GetUserIdAsync(Id);
             if(userDTO==null )

@@ -2,7 +2,7 @@
 
 namespace MyShopApp.DAL.EF.Entities
 {
-    public class Role : IdentityRole
+    public class Role : IdentityRole<int>
     {
     }
 }

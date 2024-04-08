@@ -13,7 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 string? connectionAppDb = builder.Configuration.GetConnectionString("ConnectionAppDb");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionAppDb));
-builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddUserManager<ApplicationUserManager>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();

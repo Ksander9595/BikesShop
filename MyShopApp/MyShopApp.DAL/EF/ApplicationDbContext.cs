@@ -5,7 +5,7 @@ using MyShopApp.DAL.EF.Entities;
 
 namespace MyShopApp.DAL.EF
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, string>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, int>
     {
         public DbSet<Order> Orders { get; set; }
         public DbSet<Motorcycle> Motorcycles { get; set; } = null!;
@@ -157,14 +157,15 @@ namespace MyShopApp.DAL.EF
                 );
 
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",  Name = "admin", NormalizedName = "ADMIN".ToUpper()},
-                new Role { Name = "user", NormalizedName = "USER".ToUpper()},
-                new Role { Name = "moder", NormalizedName = "MODER".ToUpper()});
+                new Role { Id = 1, Name = "user", NormalizedName = "USER".ToUpper() },
+                new Role { Id = 2, Name = "moder", NormalizedName = "MODER".ToUpper() },
+                new Role { Id = 3,  Name = "admin", NormalizedName = "ADMIN".ToUpper()}
+                );
 
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
-                    Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Id = 3,
                     UserName = "admin@mail.ru",
                     Email = "admin@mail.ru",
                     NormalizedUserName = "ADMIN",
@@ -172,11 +173,11 @@ namespace MyShopApp.DAL.EF
                 }
                 );
 
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string>
+            modelBuilder.Entity<IdentityUserRole<int>>().HasData(
+                new IdentityUserRole<int>
                 {
-                    RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                    UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    RoleId = 3,
+                    UserId = 3,
                 }
                 );
         }
