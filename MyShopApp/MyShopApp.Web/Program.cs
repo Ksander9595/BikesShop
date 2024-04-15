@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.BLL.Service;
@@ -14,16 +15,15 @@ string? connectionAppDb = builder.Configuration.GetConnectionString("ConnectionA
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionAppDb));
 builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddUserManager<ApplicationUserManager>();
+    .AddUserManager<ApplicationUserManager>()
+    .AddRoleManager<ApplicationRoleManager>()
+    .AddSignInManager<ApplicationSignInManager>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUnitOfWork, EFUnitOfWorks>();
 builder.Services.AddScoped<IClientManager, ClientManager>();
 builder.Services.AddScoped<IidentityUnitOfWork, IdentityUnitOfWork>();
-
-
-
 
 builder.Services.AddRazorPages();
 

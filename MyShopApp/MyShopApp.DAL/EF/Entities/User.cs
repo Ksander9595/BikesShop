@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.VisualBasic;
 
 namespace MyShopApp.DAL.EF.Entities
 {
     public class User : IdentityUser<int>
     {
         //public string? Role { get; set; }
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public DateOnly DateOfBirth { get; set; }
         public string? Address { get; set; }
         public string? Zip { get; set; }       

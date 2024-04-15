@@ -8,10 +8,8 @@ namespace MyShopApp.DAL.Interfaces
     {
         UserManager<User> UserManager { get; }
         RoleManager<Role> RoleManager { get; }
-        SignInManager<User> SignInManager { get; }
-        //ApplicationUserManager UserManager { get; }
-        //ApplicationRoleManager RoleManager { get; }
-        //ApplicationSignInManager SignInManager { get; }
+        SignInManager<User> SignInManager { get; }    
+
         IClientManager ClientManager { get; }
         Task SaveAsync();
     }
