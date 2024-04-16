@@ -9,19 +9,14 @@ namespace MyShopApp.DAL.Repositories
     public class IdentityUnitOfWork : IidentityUnitOfWork
     {
         private ApplicationDbContext db;
-
-        //private ApplicationUserManager userManager;
-        //private ApplicationRoleManager roleManager;
-        //private ApplicationSignInManager signInManager;
+       
         private UserManager<User> userManager;
         private RoleManager<Role> roleManager;
         private SignInManager<User> signInManager;
         private IClientManager clientManager;
 
-        public IdentityUnitOfWork(ApplicationDbContext Database,
-            //ApplicationUserManager UserManager,
-            //ApplicationRoleManager RoleManager,
-            //ApplicationSignInManager SignInManager,
+        public IdentityUnitOfWork(
+            ApplicationDbContext Database,            
             UserManager<User> UserManager,
             RoleManager<Role> RoleManager,
             SignInManager<User> SignInManager,
@@ -33,16 +28,13 @@ namespace MyShopApp.DAL.Repositories
             roleManager = RoleManager;
             signInManager = SignInManager;
             clientManager = ClientManager;
-        }
-
-        //public ApplicationUserManager UserManager { get { return userManager; } }
-        //public ApplicationRoleManager RoleManager { get { return roleManager; } }
-        //public ApplicationSignInManager SignInManager { get { return signInManager; } }
+        }        
 
         public UserManager<User> UserManager { get { return userManager; } }
         public RoleManager<Role> RoleManager { get { return roleManager; } }
         public SignInManager<User> SignInManager { get { return signInManager; } }
         public IClientManager ClientManager { get { return clientManager; } }
+
         public async Task SaveAsync()
         {
             await db.SaveChangesAsync();

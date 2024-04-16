@@ -5,12 +5,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+	
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.3"/>
   </ItemGroup>
-
+	
   <ItemGroup>
     <ProjectReference Include="..\MyShopApp.DAL\MyShopApp.DAL.csproj" />
   </ItemGroup>
