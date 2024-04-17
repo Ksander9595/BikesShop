@@ -35,15 +35,15 @@ namespace MyShopApp.Web.Controllers
                     PhoneNumber = order.PhoneNumber,
                     Address = order.Address,
                     Zip = order.Zip,
-                    MotorcycleName = order.MotorcycleName,
-                    MotorcycleModel = order.MotorcycleModel,
+                    //MotorcycleName = order.MotorcycleName,
+                    //MotorcycleModel = order.MotorcycleModel,
                     Sum = order.Sum,
                     Date = order.Date
                 };
                 ordersView.Add(orderView);
             }
             return View(ordersView);
-        }
+        }      
 
         public async Task<IActionResult> MakeOrder(int id)
         {
@@ -51,14 +51,15 @@ namespace MyShopApp.Web.Controllers
             {
                 try
                 {
-                    UserDTO userDTO = await userService.GetUserNameAsync(User.Identity.Name);
+                    //UserDTO userDTO = await userService.GetUserNameAsync(User.Identity.Name);
                     MotorcycleDTO motorcycleDTO = await orderService.GetMotorcycleAsync(id);
 
                     OrderDTO orderDTO = new OrderDTO
                     {
-                        ProductId = motorcycleDTO.Id,
-                        UserId = userDTO.Id,
-                        Sum = motorcycleDTO.Price,
+                        MotorcycleId = motorcycleDTO.Id,
+                        UserName = User.Identity.Name,
+                        //UserId = userDTO.Id,
+                        //Sum = motorcycleDTO.Price,
                         Date = DateTime.Now,
                     };
                     await orderService.MakeOrderAsync(orderDTO);

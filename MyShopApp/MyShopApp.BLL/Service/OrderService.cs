@@ -19,9 +19,44 @@ namespace MyShopApp.BLL.Service
             Database = uow;
             IdentityDatabase = iuow;
         }
+
+        public async Task MakeOrdersAsync(OrderDTO orderDto)
+        {
+            User user = await IdentityDatabase.UserManager.FindByNameAsync(orderDto.UserName);
+            var moto = await Database.Motorcycles.GetAsync(orderDto.MotorcycleId);
+            if (user != null)
+            {
+                if (user.Order != null)
+                {
+                    var cartLine = user.Order.Cart.Where(m => m.motorcycle.Id == moto.Id).FirstOrDefault();
+
+                    if (cartLine != null)
+                    {
+                        cartLine.Quantity += 1;
+                    }
+                    else
+                    {
+                        user.Order.Cart.Add(new CartLine { MotorcycleId = moto.Id, Quantity = 1 });
+                    }
+                }
+                else
+                {
+                    var order = new Order
+                    {
+                        UserId = user.Id,
+                        Date = orderDto.Date,
+                        Cart = new List<CartLine> { new CartLine { MotorcycleId = moto.Id, Quantity = 1 } },
+                        Sum = moto.Price
+                    };
+                    await Database.Orders.CreateAsync(order);                   
+                }
+                await Database.SaveAsync();
+            }           
+        }
+
         public async Task MakeOrderAsync(OrderDTO orderDto)
         {
-            var motorcycle = await Database.Motorcycles.GetAsync(orderDto.ProductId);            
+            var motorcycle = await Database.Motorcycles.GetAsync(orderDto.MotorcycleId);            
            
             if (motorcycle == null)
             {
@@ -33,7 +68,7 @@ namespace MyShopApp.BLL.Service
                 
                 UserId = orderDto.UserId,
                 Date = orderDto.Date,
-                MotorcycleId = motorcycle.Id,
+                //MotorcycleId = motorcycle.Id,
                 Sum = orderDto.Sum,
             };
             await Database.Orders.CreateAsync(order);
@@ -52,17 +87,28 @@ namespace MyShopApp.BLL.Service
             foreach(var order in Database.Orders.GetAll()) 
             {
                 var user = await IdentityDatabase.UserManager.FindByIdAsync(order.UserId.ToString());
-                var motorcycle = await Database.Motorcycles.GetAsync(order.MotorcycleId);
+                //var motorcycle = await Database.Motorcycles.GetAsync(order.Id);
+                var cartLineDTO = new List<CartLineDTO>();
+                foreach (var cartList in order.Cart)
+                {
+                    var cartLine = new CartLineDTO
+                    {
+                        MotorcycleId = cartList.MotorcycleId,
+                        Quantity = cartList.Quantity
+                    };
+                    cartLineDTO.Add(cartLine);
+                }
                 var orderDTO = new OrderDTO
                 {
                     UserName = user.UserName,
                     PhoneNumber = user.PhoneNumber,
                     Address = user.Address,
                     Zip = user.Zip,
-                    MotorcycleName = motorcycle.Name,
-                    MotorcycleModel = motorcycle.Model,
+                    //MotorcycleName = motorcycle.Name,
+                    //MotorcycleModel = motorcycle.Model,
                     Sum = order.Sum,
-                    Date = order.Date
+                    Date = order.Date,
+                    cartLineDTO = cartLineDTO
                 };
                 ordersDTO.Add(orderDTO);
             }

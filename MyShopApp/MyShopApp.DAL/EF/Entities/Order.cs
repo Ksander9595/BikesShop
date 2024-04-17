@@ -8,13 +8,12 @@ namespace MyShopApp.DAL.EF.Entities
 {
     public class Order
     {
-        public int Id { get; set; }
-        public int MotorcycleId { get; set; }
-        public int UserId { get; set; }               
+        public int Id { get; set; }       
         public decimal Sum { get; set; }
         public DateTime Date { get; set; }
-        public Motorcycle? Motorcycle { get; set; }             
+        public List<CartLine>? Cart { get; set; }
+        public int UserId { get; set; }
         public User? User { get; set; }
-        
+
     }
 }
