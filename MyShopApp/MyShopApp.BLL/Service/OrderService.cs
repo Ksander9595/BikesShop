@@ -1,5 +1,4 @@
-﻿
-using MyShopApp.BLL.DTO;
+﻿using MyShopApp.BLL.DTO;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.DAL.EF.Entities;
 using MyShopApp.DAL.Interfaces;
@@ -11,18 +10,17 @@ namespace MyShopApp.BLL.Service
 {
     public class OrderService : IOrderService//GetMotorcyclesAsync
     {
-        IUnitOfWork Database;
-        IidentityUnitOfWork IdentityDatabase;//????
+        IUnitOfWork Database;       
 
-        public OrderService(IUnitOfWork uow, IidentityUnitOfWork iuow)
+        public OrderService(IUnitOfWork uow)
         {
             Database = uow;
-            IdentityDatabase = iuow;
+            
         }
 
-        public async Task MakeOrdersAsync(OrderDTO orderDto)
+        public async Task MakeOrdersAsync(OrderDTO orderDto, string id)
         {
-            User user = await IdentityDatabase.UserManager.FindByNameAsync(orderDto.UserName);
+            User? user = await Database.UserManager.FindByIdAsync(id);
             var moto = await Database.Motorcycles.GetAsync(orderDto.MotorcycleId);
             if (user != null)
             {
@@ -86,7 +84,7 @@ namespace MyShopApp.BLL.Service
             var ordersDTO = new List<OrderDTO>();
             foreach(var order in Database.Orders.GetAll()) 
             {
-                var user = await IdentityDatabase.UserManager.FindByIdAsync(order.UserId.ToString());
+                var user = await Database.UserManager.FindByIdAsync(order.UserId.ToString());
                 //var motorcycle = await Database.Motorcycles.GetAsync(order.Id);
                 var cartLineDTO = new List<CartLineDTO>();
                 foreach (var cartList in order.Cart)

@@ -3,18 +3,17 @@ using MyShopApp.BLL.DTO;
 using MyShopApp.BLL.Infrastructure;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.Web.Models;
+using System.Security.Claims;
 
 namespace MyShopApp.Web.Controllers
 {
     public class OrderController : Controller
     {
         IOrderService orderService;
-        IUserService userService;
 
-        public OrderController(IOrderService order, IUserService user) 
+        public OrderController(IOrderService order) 
         {
-            orderService = order;
-            userService = user;
+            orderService = order;        
         }
 
         public IActionResult OrderSuccessfully()
@@ -49,6 +48,7 @@ namespace MyShopApp.Web.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
+                var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
                 try
                 {
                     //UserDTO userDTO = await userService.GetUserNameAsync(User.Identity.Name);
@@ -62,7 +62,7 @@ namespace MyShopApp.Web.Controllers
                         //Sum = motorcycleDTO.Price,
                         Date = DateTime.Now,
                     };
-                    await orderService.MakeOrderAsync(orderDTO);
+                    await orderService.MakeOrdersAsync(orderDTO, userId);
                     return View("OrderSuccessfully");
                 }
                 catch (ValidationException ex)

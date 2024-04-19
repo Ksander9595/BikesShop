@@ -1,9 +1,5 @@
-﻿using MyShopApp.DAL.EF.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
+using MyShopApp.DAL.EF.Entities;
 
 namespace MyShopApp.DAL.Interfaces
 {
@@ -11,6 +7,11 @@ namespace MyShopApp.DAL.Interfaces
     {
         IRepository<Motorcycle> Motorcycles { get; }
         IRepository<Order> Orders { get; }
+        UserManager<User> UserManager { get; }
+        RoleManager<Role> RoleManager { get; }
+        SignInManager<User> SignInManager { get; }
+
+        IClientManager ClientManager { get; }
         Task SaveAsync();
     }
 }

@@ -12,9 +12,9 @@ namespace MyShopApp.BLL.Service
 {
     public class UserService : IUserService //GetUsers and GetUsersRoleAsync
     {
-        IidentityUnitOfWork Database;
+        IUnitOfWork Database;
         
-        public UserService(IidentityUnitOfWork db) 
+        public UserService(IUnitOfWork db) 
         {          
             Database = db;
         }

@@ -13,8 +13,8 @@ namespace MyShopApp.DAL.Repositories
             db = context;
         }
         public IEnumerable<Order> GetAll()
-        {            
-            return db.Orders.Include(o=>o.Motorcycle);            
+        {
+            return db.Orders;         
         }
         public async Task<Order> GetAsync(int id)
         {
@@ -40,7 +40,6 @@ namespace MyShopApp.DAL.Repositories
         public IEnumerable<Order> Find(Func<Order, Boolean> predicate)
         {
             return db.Orders
-                .Include(o=>o.Motorcycle)
                 .Where(predicate)
                 .ToList();
             

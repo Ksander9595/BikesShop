@@ -1,4 +1,5 @@
-﻿using MyShopApp.DAL.EF;
+﻿using Microsoft.AspNetCore.Identity;
+using MyShopApp.DAL.EF;
 using MyShopApp.DAL.EF.Entities;
 using MyShopApp.DAL.Interfaces;
 
@@ -11,10 +12,20 @@ namespace MyShopApp.DAL.Repositories
 
         private MotorcycleRepository motorcycleRepository;
         private OrderRepository orderRepository;
+        private UserManager<User> userManager;
+        private RoleManager<Role> roleManager;
+        private SignInManager<User> signInManager;
+        private IClientManager clientManager;
 
-        public EFUnitOfWorks(ApplicationDbContext context)
+        public EFUnitOfWorks(
+            ApplicationDbContext context, UserManager<User> UserManager, RoleManager<Role> RoleManager, SignInManager<User> SignInManager,
+            IClientManager ClientManager)
         {
             db = context;
+            userManager = UserManager;
+            roleManager = RoleManager;
+            signInManager = SignInManager;
+            clientManager = ClientManager;
         }
         public IRepository<Motorcycle> Motorcycles
         {
@@ -34,6 +45,10 @@ namespace MyShopApp.DAL.Repositories
                 return orderRepository;
             }
         }
+        public UserManager<User> UserManager { get { return userManager; } }
+        public RoleManager<Role> RoleManager { get { return roleManager; } }
+        public SignInManager<User> SignInManager { get { return signInManager; } }
+        public IClientManager ClientManager { get { return clientManager; } }
         public async Task SaveAsync()
         {
             await db.SaveChangesAsync();
@@ -47,6 +62,9 @@ namespace MyShopApp.DAL.Repositories
                 if(disposing)
                 {
                     db.Dispose();
+                    userManager.Dispose();
+                    roleManager.Dispose();                   
+                    clientManager.Dispose();
                 }
                 this.disposed = true;
             }    

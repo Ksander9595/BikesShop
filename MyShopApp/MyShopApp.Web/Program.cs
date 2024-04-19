@@ -24,7 +24,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUnitOfWork, EFUnitOfWorks>();
 builder.Services.AddScoped<IClientManager, ClientManager>();
-builder.Services.AddScoped<IidentityUnitOfWork, IdentityUnitOfWork>();
 
 builder.Services.AddRazorPages();
 

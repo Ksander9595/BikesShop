@@ -1,19 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MyShopApp.BLL.Interfaces;
+﻿using MyShopApp.BLL.Interfaces;
 using MyShopApp.DAL.EF.Entities;
 using MyShopApp.BLL.DTO;
-using AutoMapper;
-using MyShopApp.DAL.Interfaces;
 using MyShopApp.BLL.Infrastructure;
+using MyShopApp.DAL.Interfaces;
 
 namespace MyShopApp.BLL.Service
 {
     public class RoleService : IRoleService
     {
 
-        IidentityUnitOfWork Database;
+       IUnitOfWork Database;
 
-        public RoleService(IidentityUnitOfWork db)
+        public RoleService(IUnitOfWork db)
         {
             Database = db;
         }
