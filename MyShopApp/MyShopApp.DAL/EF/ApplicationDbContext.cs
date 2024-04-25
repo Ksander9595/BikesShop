@@ -7,9 +7,11 @@ namespace MyShopApp.DAL.EF
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, int>
     {
-        public DbSet<Order> Orders { get; set; }
+      
+        public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<Motorcycle> Motorcycles { get; set; } = null!;
-        public DbSet<ClientProfile> ClientProfiles { get; set; }
+        public DbSet<Cart> Carts { get; set; } = null!;
+        public DbSet<ClientProfile> ClientProfiles { get; set; } = null!;
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

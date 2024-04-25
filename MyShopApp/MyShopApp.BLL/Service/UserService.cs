@@ -73,7 +73,7 @@ namespace MyShopApp.BLL.Service
 
                     await Database.UserManager.AddToRoleAsync(user, "user");
                 
-                ClientProfile clientProfile = new ClientProfile { Id = user.Id, Address = userDTO.Address, Name = userDTO.Name };
+                ClientProfile clientProfile = new ClientProfile { User = user, Address = userDTO.Address, Name = userDTO.Name };
                 await Database.ClientManager.CreateAsync(clientProfile);
                 await Database.SaveAsync();
                 return new OperationDetails(true, "Registration user successful", "");

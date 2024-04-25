@@ -6,7 +6,7 @@ namespace MyShopApp.DAL.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAll();
         Task<T> GetAsync(int id);
         IEnumerable<T> Find(Func<T, Boolean> predicate);
         Task CreateAsync(T item);

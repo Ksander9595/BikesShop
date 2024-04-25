@@ -6,16 +6,16 @@ using MyShopApp.DAL.Interfaces;
 
 namespace MyShopApp.DAL.Repositories
 {
-    public class MotorcycleRepository : IRepository<Motorcycle>//GetAllAsync or not
+    public class MotorcycleRepository : IRepository<Motorcycle>
     {
         private ApplicationDbContext db;
         public MotorcycleRepository(ApplicationDbContext context)
         {
             db = context;
         }
-        public IEnumerable<Motorcycle> GetAll()
+        public async Task<IEnumerable<Motorcycle>> GetAll()
         {
-            return db.Motorcycles;
+            return await db.Motorcycles.ToListAsync();
         }
         public async Task<Motorcycle> GetAsync(int id)
         {

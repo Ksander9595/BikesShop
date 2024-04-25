@@ -18,6 +18,5 @@ namespace MyShopApp.BLL.DTO
         public string? Color { get; set; }
         public bool Condition { get; set; }
         public bool Availability { get; set; }
-        public List<Order>? Orders { get; set; }
     }
 }

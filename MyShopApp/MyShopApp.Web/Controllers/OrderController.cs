@@ -28,14 +28,24 @@ namespace MyShopApp.Web.Controllers
 
             foreach (var order in ordersDTO)
             {
+                var cartsView = new List<CartViewModel>();
+                foreach(var cart in order.cartDTOs)
+                {
+                    var cartView = new CartViewModel
+                    {
+                        MotorcycleName = cart.MotorcycleName,
+                        MotorcycleModel = cart.MotorcycleModel,
+                        Quantity = cart.Quantity
+                    };
+                    cartsView.Add(cartView);
+                }
                 var orderView = new OrderViewModel
                 {
                     UserName = order.UserName,
                     PhoneNumber = order.PhoneNumber,
                     Address = order.Address,
                     Zip = order.Zip,
-                    //MotorcycleName = order.MotorcycleName,
-                    //MotorcycleModel = order.MotorcycleModel,
+                    cartViewModels = cartsView,
                     Sum = order.Sum,
                     Date = order.Date
                 };
@@ -50,19 +60,16 @@ namespace MyShopApp.Web.Controllers
             {
                 var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
                 try
-                {
-                    //UserDTO userDTO = await userService.GetUserNameAsync(User.Identity.Name);
+                {                   
                     MotorcycleDTO motorcycleDTO = await orderService.GetMotorcycleAsync(id);
 
                     OrderDTO orderDTO = new OrderDTO
                     {
                         MotorcycleId = motorcycleDTO.Id,
-                        UserName = User.Identity.Name,
-                        //UserId = userDTO.Id,
-                        //Sum = motorcycleDTO.Price,
+                        UserId = Int32.Parse(userId),
                         Date = DateTime.Now,
                     };
-                    await orderService.MakeOrdersAsync(orderDTO, userId);
+                    await orderService.MakeOrderAsync(orderDTO);
                     return View("OrderSuccessfully");
                 }
                 catch (ValidationException ex)

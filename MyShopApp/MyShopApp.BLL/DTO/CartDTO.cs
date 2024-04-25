@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MyShopApp.BLL.DTO
 {
-    public class CartLineDTO
+    public class CartDTO
     {
-        public int CardId { get; set; }
-        public int MotorcycleId { get; set; }
-        public MotorcycleDTO? motorcycleDTO { get; set; }
+        public int Id { get; set; }          
+        public string? MotorcycleName { get; set; }
+        public string? MotorcycleModel { get; set; }
         public int Quantity { get; set; }
     }
 }

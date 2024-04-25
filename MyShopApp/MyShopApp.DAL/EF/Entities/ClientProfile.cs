@@ -5,12 +5,10 @@ namespace MyShopApp.DAL.EF.Entities
 {
     public class ClientProfile
     {
-        [Key]
-        [ForeignKey("User")]//связывает класс отношениями один-к-одному
         public int Id {  get; set; }
         public string? Name { get; set; }
         public string? Address { get; set; }
-
-        public virtual User? User { get; set; }
+        public int UserId { get; set; }
+        public User? User { get; set; }
     }
 }

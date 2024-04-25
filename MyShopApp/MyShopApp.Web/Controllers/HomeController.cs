@@ -22,10 +22,10 @@ namespace MyShopApp.Web.Controllers
             return View();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {          
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<MotorcycleDTO, MotorcycleViewModel>()).CreateMapper();
-            var motorcycles = mapper.Map<IEnumerable<MotorcycleDTO>, List<MotorcycleViewModel>>(orderService.GetMotorcycles());
+            var motorcycles = mapper.Map<IEnumerable<MotorcycleDTO>, List<MotorcycleViewModel>>(await orderService.GetMotorcycles());
             return View(motorcycles);
         }
 
