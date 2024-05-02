@@ -5,6 +5,7 @@ namespace MyShopApp.DAL.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
+        IRepository<CartLine> CartsLine { get; }
         IRepository<Cart> Carts { get; }
         IRepository<Motorcycle> Motorcycles { get; }
         IRepository<Order> Orders { get; }

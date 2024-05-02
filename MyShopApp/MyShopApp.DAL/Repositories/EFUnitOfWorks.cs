@@ -10,6 +10,7 @@ namespace MyShopApp.DAL.Repositories
     {
         private ApplicationDbContext db;
 
+        private CartLineRepository cartLineRepository;
         private CartRepository cartRepository;
         private MotorcycleRepository motorcycleRepository;
         private OrderRepository orderRepository;
@@ -27,6 +28,15 @@ namespace MyShopApp.DAL.Repositories
             roleManager = RoleManager;
             signInManager = SignInManager;
             clientManager = ClientManager;
+        }
+        public IRepository<CartLine> CartsLine
+        {
+            get
+            {
+                if (cartLineRepository == null)
+                    cartLineRepository = new CartLineRepository(db);
+                return cartLineRepository;
+            }
         }
         public IRepository<Cart> Carts
         {

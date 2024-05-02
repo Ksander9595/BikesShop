@@ -12,9 +12,6 @@ namespace MyShopApp.DAL.EF.Entities
         public int Id { get; set; }       
         public decimal Sum { get; set; }
         public DateTime Date { get; set; }
-        public List<Cart>? Cart { get; set; }
-        public int UserId { get; set; }
-        public User? User { get; set; }
-
+       
     }
 }

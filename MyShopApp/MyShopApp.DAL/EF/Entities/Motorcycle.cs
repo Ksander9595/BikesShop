@@ -21,8 +21,8 @@ namespace MyShopApp.DAL.EF.Entities
         public int Mileage { get; set; }
         public string? Color { get; set; }
         public bool Condition { get; set; }
-        public bool Availability { get; set; }       
-        public Cart? Cart { get; set; }
+        public bool Availability { get; set; }              
+        public CartLine? CartLine { get; set; }
 
     }
 }
