@@ -6,6 +6,6 @@ namespace MyShopApp.BLL.Interfaces
     public interface ICartService : IDisposable
     {
         Task MakeCartAsync(CartDTO cartDto);
-        Task<IEnumerable<CartDTO>> GetCartsUserAsync();
+        Task<CartDTO> GetCartAsync();
     }
 }

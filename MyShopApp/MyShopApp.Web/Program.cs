@@ -18,7 +18,8 @@ builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddUserManager<ApplicationUserManager>()
     .AddRoleManager<ApplicationRoleManager>();
-    //.AddSignInManager<ApplicationSignInManager>();
+//.AddSignInManager<ApplicationSignInManager>();
+builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();

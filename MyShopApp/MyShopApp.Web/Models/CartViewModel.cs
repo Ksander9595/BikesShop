@@ -2,8 +2,8 @@
 {
     public class CartViewModel
     {
-        public string? MotorcycleName { get; set; }
-        public string? MotorcycleModel { get; set; }
-        public int Quantity { get; set; }
+        public decimal Sum { get; set; }
+        public DateTime Date { get; set; }
+        public List<CartLineViewModel>? cartLineViewModels { get; set; }
     }
 }

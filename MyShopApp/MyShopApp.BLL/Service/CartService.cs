@@ -1,4 +1,5 @@
 ﻿using MyShopApp.BLL.DTO;
+using MyShopApp.BLL.Infrastructure;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.DAL.EF.Entities;
 using MyShopApp.DAL.Interfaces;
@@ -64,38 +65,55 @@ namespace MyShopApp.BLL.Service
             }
         }
 
-        public async Task<IEnumerable<CartDTO>> GetCartsUserAsync()
+        public async Task <CartDTO> GetCartAsync()
         {
-            var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
-            var cartDTO = new CartDTO();
+            var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;          
             var carts = await Database.Carts.GetAll();
             var cartUser = carts.Where(c=>c.UserId == Int32.Parse(userId)).FirstOrDefault();
-                var user = await Database.UserManager.FindByIdAsync(order.UserId.ToString());
-                var cartsDTO = new List<CartDTO>();
-                foreach (var cart in order.Cart)
+            var cartsLineDTO = new List<CartLineDTO>();           
+            foreach (var cartLine in cartUser.CartLine)
+            {
+                var cartLineDTO = new CartLineDTO
                 {
-                    var cartDTO = new CartDTO
-                    {
-                        MotorcycleName = cart.motorcycle.Name,
-                        MotorcycleModel = cart.motorcycle.Model,
-                        Quantity = cart.Quantity,
+                    MotorcycleName = cartLine.motorcycle.Name,
+                    MotorcycleModel = cartLine.motorcycle.Model,
+                    Quantity = cartLine.Quantity,
 
-                    };
-                    cartsDTO.Add(cartDTO);
-                }
-                var orderDTO = new OrderDTO
-                {
-                    UserName = user.UserName,
-                    PhoneNumber = user.PhoneNumber,
-                    Address = user.Address,
-                    Zip = user.Zip,
-                    cartDTOs = cartsDTO,
-                    Sum = order.Sum,
-                    Date = order.Date,
                 };
-                ordersDTO.Add(orderDTO);
+                cartsLineDTO.Add(cartLineDTO);
             }
-            return ordersDTO;
+            var cartDTO = new CartDTO
+            {
+                Date = cartUser.Date,
+                CartsLine = cartsLineDTO
+            };                            
+                return cartDTO;
+        }
+        public async Task<MotorcycleDTO> GetMotorcycleAsync(int id)
+        {
+            if (id == null)
+                throw new ValidationException("ID motorcycle not found", "");
+            var motorcycle = await Database.Motorcycles.GetAsync(id);
+            if (motorcycle == null)
+                throw new ValidationException("Motorcycle not found", "");
+
+            return new MotorcycleDTO
+            {
+                Id = motorcycle.Id,
+                Name = motorcycle.Name,
+                Model = motorcycle.Model,
+                Description = motorcycle.Description,
+                Price = motorcycle.Price,
+                motoClass = motorcycle.motoClass,
+                Year = motorcycle.Year,
+                Hp = motorcycle.Hp,
+                Capacity = motorcycle.Capacity,
+                Document = motorcycle.Document,
+                Mileage = motorcycle.Mileage,
+                Color = motorcycle.Color,
+                Condition = motorcycle.Condition,
+                Availability = motorcycle.Availability
+            };
         }
         public void Dispose()
         {
