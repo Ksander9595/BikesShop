@@ -65,11 +65,10 @@ namespace MyShopApp.BLL.Service
             }
         }
 
-        public async Task <CartDTO> GetCartAsync()
-        {
-            var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;          
+        public async Task <CartDTO> GetCartAsync(int Id)
+        {                    
             var carts = await Database.Carts.GetAll();
-            var cartUser = carts.Where(c=>c.UserId == Int32.Parse(userId)).FirstOrDefault();
+            var cartUser = carts.Where(c=>c.Id == Id).FirstOrDefault();
             var cartsLineDTO = new List<CartLineDTO>();           
             foreach (var cartLine in cartUser.CartLine)
             {
@@ -84,16 +83,17 @@ namespace MyShopApp.BLL.Service
             }
             var cartDTO = new CartDTO
             {
+                Id = Id,
                 Date = cartUser.Date,
                 CartsLine = cartsLineDTO
             };                            
                 return cartDTO;
         }
-        public async Task<MotorcycleDTO> GetMotorcycleAsync(int id)
+        public async Task<MotorcycleDTO> GetMotorcycleAsync(int Id)
         {
-            if (id == null)
+            if (Id == 0)
                 throw new ValidationException("ID motorcycle not found", "");
-            var motorcycle = await Database.Motorcycles.GetAsync(id);
+            var motorcycle = await Database.Motorcycles.GetAsync(Id);
             if (motorcycle == null)
                 throw new ValidationException("Motorcycle not found", "");
 

@@ -2,7 +2,6 @@
 using MyShopApp.BLL.DTO;
 using MyShopApp.BLL.Infrastructure;
 using MyShopApp.BLL.Interfaces;
-using MyShopApp.BLL.Service;
 using MyShopApp.Web.Models;
 using System.Security.Claims;
 
@@ -11,39 +10,18 @@ namespace MyShopApp.Web.Controllers
     public class CartController : Controller
     {
         ICartService cartService;
+        IOrderService orderService;
 
-        public CartController(ICartService cart)
+        public CartController(ICartService cart, IOrderService _orderService)
         {
             cartService = cart;
+            orderService = _orderService;
         }
 
         public IActionResult CartSuccessfully()
         {
             return View();
-        }
-        public async Task<IActionResult> CartUser()
-        {
-            var cartDTO = await cartService.GetCartAsync();           
-
-                var cartLineView = new List<CartLineViewModel>();
-                foreach (var cart in cartDTO.CartsLine)
-                {
-                    var cartView = new CartLineViewModel
-                    {
-                        MotorcycleName = cart.MotorcycleName,
-                        MotorcycleModel = cart.MotorcycleModel,
-                        Quantity = cart.Quantity
-                    };
-                    cartLineView.Add(cartView);
-                }
-            var cartViewModel = new CartViewModel
-            {
-                Date = cartDTO.Date,
-                cartLineViewModels = cartLineView,
-            };
-            return View(cartViewModel);
-        }
-
+        }      
         public async Task<IActionResult> MakeCart(int id)
         {
             if (User.Identity.IsAuthenticated)
@@ -72,6 +50,32 @@ namespace MyShopApp.Web.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+        }
+        [HttpGet]
+        public async Task<IActionResult> Checkout(int Id)
+        {
+            CartDTO cartDTO = await cartService.GetCartAsync(Id);
+            if (cartDTO == null)
+                return NotFound();
+            return View(cartDTO);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Checkout(CheckoutViewModel model, CartDTO cartDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                OrderDTO orderDTO = new OrderDTO
+                {
+                    NumberCart = model.NumberCart,
+                    Validity = model.Validity,
+                    CVV = model.CVV,
+                    CartId = cartDTO.Id,                   
+                };
+                await orderService.MakeOrderAsync(orderDTO);
+                return RedirectToAction("UserPage");
+            }
+            return View(model);
+            
         }
     }
 }

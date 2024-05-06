@@ -2,21 +2,45 @@
 using MyShopApp.BLL.DTO;
 using MyShopApp.BLL.Interfaces;
 using MyShopApp.Web.Models;
+using System.Security.Claims;
 
 namespace MyShopApp.Web.Controllers
 {
     public class UsersController : Controller
     {
         IUserService userService;
+        ICartService cartService;
         
-        public UsersController(IUserService _userService)
+        public UsersController(IUserService _userService, ICartService _cartService)
         {
             userService = _userService;
-        }
-        public IActionResult UserPage()
+            cartService = _cartService;
+        }        
+        public async Task<IActionResult> UserPage()
         {
-            return View(User);
-        }
+            var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = await userService.GetUserIdAsync(Int32.Parse(userId));
+            var cartDTO = await cartService.GetCartAsync(user.CartId);
+
+            var cartLineView = new List<CartLineViewModel>();
+            foreach (var cart in cartDTO.CartsLine)
+            {
+                var cartView = new CartLineViewModel
+                {                    
+                    MotorcycleName = cart.MotorcycleName,
+                    MotorcycleModel = cart.MotorcycleModel,
+                    Quantity = cart.Quantity
+                };
+                cartLineView.Add(cartView);
+            }
+            var cartViewModel = new CartViewModel
+            {
+                Id = cartDTO.Id,
+                Date = cartDTO.Date,
+                cartLineViewModels = cartLineView,
+            };
+            return View(cartViewModel);
+        }    
         public IActionResult UserList() => View(userService.GetUsers());
 
         public IActionResult Create() => View();

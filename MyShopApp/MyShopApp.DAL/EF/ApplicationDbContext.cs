@@ -16,8 +16,8 @@ namespace MyShopApp.DAL.EF
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -183,6 +183,11 @@ namespace MyShopApp.DAL.EF
                     UserId = 3,
                 }
                 );
+            modelBuilder.Entity<Card>(
+                c =>
+                {
+                    c.HasNoKey();
+                });
         }
     }
 }

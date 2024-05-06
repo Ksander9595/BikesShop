@@ -1,0 +1,50 @@
+﻿@model MyShopApp.Web.Models.CheckoutViewModel
+
+@{
+    Layout = "_LayoutAccount";
+    ViewBag.Title = "Checkout";
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <a class="rounded" asp-controller="Home" asp-action="HomePage">
+                <img src="/LogoPageImage/logo.jpg" width="60" height="60" class="rounded" alt="">
+            </a>
+            <p></p>
+            <table class="table table-responsive">
+                <form class="text-center" method="post" asp-controller="Account" asp-action="Register">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <h2>Cart entry</h2>
+                    <div class="card border-dark text-black bg-secondary mb-3" style="width: 26rem;">
+                        <div class="card-body">
+                            <div>
+                                <label asp-for="NumberCart">Number cart</label><br />
+                                <input asp-for="NumberCart" />
+                                <span asp-validation-for="NumberCart"></span>
+                            </div>
+                            <div>
+                                <label asp-for="Validity">Validity</label><br />
+                                <input asp-for="Validity" />
+                                <span asp-validation-for="Validity"></span>
+                            </div>
+                            <div>
+                                <label asp-for="CVV"></label><br />
+                                <input asp-for="CVV" />
+                                <span asp-validation-for="CVV"></span>
+                            </div>
+                            <div>
+                                <form asp-action="Checkout" asp-controller="Cart" method="out">
+                                    <input type="hidden" />
+                                    <button type="submit" class="btn btn-success btn-sm pull-right">Checkout</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </table>
+        </div>
+        <div class="col-6">
+            <img src="/AccountPageImage/moto4.jpg" class="rounded" style="width: 900px; height: 900px" alt="">
+        </div>
+    </div>
+</div>

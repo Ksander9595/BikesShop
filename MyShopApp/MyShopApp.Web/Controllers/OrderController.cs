@@ -11,9 +11,9 @@ namespace MyShopApp.Web.Controllers
     {
         IOrderService orderService;
 
-        public OrderController(IOrderService order) 
+        public OrderController(IOrderService order)
         {
-            orderService = order;        
+            orderService = order;
         }
 
         public IActionResult OrderSuccessfully()
@@ -28,16 +28,16 @@ namespace MyShopApp.Web.Controllers
 
             foreach (var order in ordersDTO)
             {
-                var cartsView = new List<CartViewModel>();
-                foreach(var cart in order.cartDTOs)
+                var cartsView = new List<CartLineViewModel>();
+                foreach (var cartLine in order.CartsLineDTO)
                 {
-                    var cartView = new CartViewModel
+                    var cartLineView = new CartLineViewModel
                     {
-                        MotorcycleName = cart.MotorcycleName,
-                        MotorcycleModel = cart.MotorcycleModel,
-                        Quantity = cart.Quantity
+                        MotorcycleName = cartLine.MotorcycleName,
+                        MotorcycleModel = cartLine.MotorcycleModel,
+                        Quantity = cartLine.Quantity
                     };
-                    cartsView.Add(cartView);
+                    cartsView.Add(cartLineView);
                 }
                 var orderView = new OrderViewModel
                 {
@@ -45,43 +45,14 @@ namespace MyShopApp.Web.Controllers
                     PhoneNumber = order.PhoneNumber,
                     Address = order.Address,
                     Zip = order.Zip,
-                    cartViewModels = cartsView,
+                    cartViewModel = cartsView,
                     Sum = order.Sum,
                     Date = order.Date
                 };
                 ordersView.Add(orderView);
             }
             return View(ordersView);
-        }      
-
-        public async Task<IActionResult> MakeOrder(int id)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
-                try
-                {                   
-                    MotorcycleDTO motorcycleDTO = await orderService.GetMotorcycleAsync(id);
-
-                    OrderDTO orderDTO = new OrderDTO
-                    {
-                        MotorcycleId = motorcycleDTO.Id,
-                        UserId = Int32.Parse(userId),
-                        Date = DateTime.Now,
-                    };
-                    await orderService.MakeOrderAsync(orderDTO);
-                    return View("OrderSuccessfully");
-                }
-                catch (ValidationException ex)
-                {
-                    return Content(ex.Message);
-
-                }
-            }
-            else
-            {
-                return RedirectToAction("Login", "Account");
-            }
         }
+        
     }
 }

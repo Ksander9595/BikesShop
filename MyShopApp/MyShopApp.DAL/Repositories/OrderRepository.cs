@@ -13,8 +13,9 @@ namespace MyShopApp.DAL.Repositories
             db = context;
         }
         public async Task<IEnumerable<Order>> GetAll()
-        {            
-            return await db.Orders.Include(c=>c.Cart).ThenInclude(c=>c.motorcycle).ToListAsync();                    
+        {
+            return await db.Orders.ToListAsync();
+            
         }
         public async Task<Order> GetAsync(int id)
         {

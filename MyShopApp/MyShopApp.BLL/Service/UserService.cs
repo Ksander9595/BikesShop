@@ -27,7 +27,8 @@ namespace MyShopApp.BLL.Service
                 Id = user.Id,
                 Email = user.Email,
                 Name = user.Email,
-                DateOfBirth = user.DateOfBirth               
+                DateOfBirth = user.DateOfBirth,  
+                CartId = user.Cart.Id
             };                       
         }  
 
