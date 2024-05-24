@@ -15,7 +15,7 @@ namespace MyShopApp.DAL.Repositories
         }
         public async Task<IEnumerable<Cart>> GetAll()
         {
-            return await db.Carts.ToListAsync();
+            return await db.Carts.Include(cl => cl.CartLine).ToListAsync();
         }
         public async Task<Cart> GetAsync(int id)
         {

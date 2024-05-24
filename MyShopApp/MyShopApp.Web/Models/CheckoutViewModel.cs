@@ -14,6 +14,7 @@ namespace MyShopApp.Web.Models
 
         [Required]
         [Display(Name = "CVV")]
-        public int CVV { get; set; }       
+        public int CVV { get; set; }   
+        public int CardId { get; set; }
     }
 }

@@ -16,14 +16,15 @@ namespace MyShopApp.DAL.EF
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            //Database.EnsureDeleted();
+            Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Motorcycle>().HasData(
-                new Motorcycle {
+                new Motorcycle
+                {
                     Id = 1,
                     Name = "Harley-Davidson",
                     Model = "FatBoy",
@@ -37,7 +38,8 @@ namespace MyShopApp.DAL.EF
                     Document = true,
                     Mileage = 0,
                     Condition = true,
-                    Availability = true },
+                    Availability = true
+                },
                 new Motorcycle
                 {
                     Id = 2,
@@ -162,7 +164,7 @@ namespace MyShopApp.DAL.EF
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "user", NormalizedName = "USER".ToUpper() },
                 new Role { Id = 2, Name = "moder", NormalizedName = "MODER".ToUpper() },
-                new Role { Id = 3,  Name = "admin", NormalizedName = "ADMIN".ToUpper()}
+                new Role { Id = 3, Name = "admin", NormalizedName = "ADMIN".ToUpper() }
                 );
 
             modelBuilder.Entity<User>().HasData(
@@ -183,11 +185,6 @@ namespace MyShopApp.DAL.EF
                     UserId = 3,
                 }
                 );
-            modelBuilder.Entity<Card>(
-                c =>
-                {
-                    c.HasNoKey();
-                });
         }
     }
 }

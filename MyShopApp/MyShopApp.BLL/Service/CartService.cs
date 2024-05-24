@@ -24,7 +24,6 @@ namespace MyShopApp.BLL.Service
             var moto = await Database.Motorcycles.GetAsync(cartDto.MotorcycleId);
             if (cartUser == null)
             {
-
                 Cart cart = new Cart
                 {
                     user = user,
@@ -36,58 +35,82 @@ namespace MyShopApp.BLL.Service
                 {
                     motorcycle = moto,
                     Cart = cart,
+                    Price = moto.Price,
                     Quantity = 1
                 };
                 await Database.CartsLine.CreateAsync(cartLine);
                 await Database.SaveAsync();
+                await UpdateCarPriceAsync(cart);
             }
             else
             {
                 var cartLineUser = cartUser.CartLine.Where(m => m.MotorcycleId == cartDto.MotorcycleId).FirstOrDefault();
                 if (cartLineUser == null)
-                {
+                {                   
                     CartLine cartLine = new CartLine
                     {
                         CartId = user.Cart.Id,
                         motorcycle = moto,
+                        Price = moto.Price,
                         Quantity = 1,
                     };
                     await Database.CartsLine.CreateAsync(cartLine);
                     await Database.SaveAsync();
+                    await UpdateCarPriceAsync(cartUser);
                 }
                 else
                 {
                     var cartLineUSer = cartUser.CartLine.Where(m => m.MotorcycleId == cartDto.MotorcycleId).FirstOrDefault();
+                    cartLineUser.Price += moto.Price;
                     cartLineUser.Quantity += 1;
                     Database.CartsLine.Update(cartLineUser);
                     await Database.SaveAsync();
+                    await UpdateCarPriceAsync(cartUser);
                 }
             }
         }
-
+        private async Task UpdateCarPriceAsync(Cart cart)
+        {
+            decimal SumMoto = 0;
+            foreach (var cartL in cart.CartLine)
+            {
+                 SumMoto += cartL.Price;
+            }
+            cart.Sum = SumMoto;
+            Database.Carts.Update(cart);
+            await Database.SaveAsync();
+        }
         public async Task <CartDTO> GetCartAsync(int Id)
         {                    
             var carts = await Database.Carts.GetAll();
             var cartUser = carts.Where(c=>c.Id == Id).FirstOrDefault();
-            var cartsLineDTO = new List<CartLineDTO>();           
-            foreach (var cartLine in cartUser.CartLine)
+            if (cartUser != null)
             {
-                var cartLineDTO = new CartLineDTO
+                var cartsLine = await Database.CartsLine.GetAll();
+                var cartsLineDTO = new List<CartLineDTO>();
+                foreach (var cartLine in cartUser.CartLine)
                 {
-                    MotorcycleName = cartLine.motorcycle.Name,
-                    MotorcycleModel = cartLine.motorcycle.Model,
-                    Quantity = cartLine.Quantity,
+                    var cartLineDTO = new CartLineDTO
+                    {
+                        MotorcycleName = cartLine.motorcycle.Name,
+                        MotorcycleModel = cartLine.motorcycle.Model,
+                        Price = cartLine.Price,
+                        Quantity = cartLine.Quantity
 
+                    };
+                    cartsLineDTO.Add(cartLineDTO);
+                }
+                var cartDTO = new CartDTO
+                {
+                    Id = Id,
+                    Date = cartUser.Date,
+                    CartsLine = cartsLineDTO,
+                    Sum = cartUser.Sum
                 };
-                cartsLineDTO.Add(cartLineDTO);
-            }
-            var cartDTO = new CartDTO
-            {
-                Id = Id,
-                Date = cartUser.Date,
-                CartsLine = cartsLineDTO
-            };                            
                 return cartDTO;
+            }
+            else
+                return new CartDTO { Id = 0};
         }
         public async Task<MotorcycleDTO> GetMotorcycleAsync(int Id)
         {

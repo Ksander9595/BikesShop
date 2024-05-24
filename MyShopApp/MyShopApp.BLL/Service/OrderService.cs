@@ -25,10 +25,11 @@ namespace MyShopApp.BLL.Service
             Order order = new Order
             {
                 Date = DateTime.Now,
-                cart = cartUser,
-                user = user,
+                cart = cartUser,               
                 Sum = orderDto.Sum,
-                card = new Card { NumberCart = orderDto.NumberCart, Validity = orderDto.Validity, CVV = orderDto.CVV }
+                NumberCart = orderDto.NumberCart, 
+                Validity = orderDto.Validity, 
+                CVV = orderDto.CVV 
             };
             await Database.Orders.CreateAsync(order);
             await Database.SaveAsync();
@@ -42,33 +43,35 @@ namespace MyShopApp.BLL.Service
 
         public async Task<IEnumerable<OrderDTO>> GetOrdersAsync()
         {
-            var orders = await Database.Orders.GetAll();
+            var orders = await Database.Orders.GetAll();           
             var ordersDTO = new List<OrderDTO>();
             foreach (var order in orders)
             {
                 var cartsLineDTO = new List<CartLineDTO>();
                 foreach(var cartLine in order.cart.CartLine)
                 {
+                    var moto = await Database.Motorcycles.GetAsync(cartLine.MotorcycleId);
                     var cartLineDTO = new CartLineDTO
                     {
-                        MotorcycleName = cartLine.motorcycle.Name,
-                        MotorcycleModel = cartLine.motorcycle.Model,
+                        MotorcycleName = moto.Name,
+                        MotorcycleModel = moto.Model,
                         Quantity = cartLine.Quantity
                     };
                     cartsLineDTO.Add(cartLineDTO);
                 }
+                var user = await Database.UserManager.FindByIdAsync(order.cart.UserId.ToString());
                 var orderDTO = new OrderDTO
                 {
                     Id = order.Id,
                     Date = order.Date,
-                    UserName = order.user.UserName,
+                    UserName = user.UserName,
                     CartsLineDTO = cartsLineDTO,
-                    PhoneNumber = order.user.PhoneNumber,
-                    Address = order.user.Address,
-                    Zip = order.user.Zip,
-                    NumberCart = order.card.NumberCart,
-                    Validity = order.card.Validity,
-                    CVV = order.card.CVV
+                    PhoneNumber = user.PhoneNumber,
+                    Address = user.Address,
+                    Zip = user.Zip,
+                    NumberCart = order.NumberCart,
+                    Validity = order.Validity,
+                    CVV = order.CVV
                 };
                 ordersDTO.Add(orderDTO);
             }

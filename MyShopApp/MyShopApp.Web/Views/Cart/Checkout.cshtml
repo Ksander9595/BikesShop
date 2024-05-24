@@ -12,11 +12,13 @@
             </a>
             <p></p>
             <table class="table table-responsive">
-                <form class="text-center" method="post" asp-controller="Account" asp-action="Register">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <h2>Cart entry</h2>
+                <form class="text-center" method="post" asp-controller="Cart" asp-action="Checkout">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>                                   
                     <div class="card border-dark text-black bg-secondary mb-3" style="width: 26rem;">
                         <div class="card-body">
+                            <div class="form-group">
+                                <input type="hidden" asp-for="CardId" />
+                            </div>
                             <div>
                                 <label asp-for="NumberCart">Number cart</label><br />
                                 <input asp-for="NumberCart" />
@@ -31,13 +33,10 @@
                                 <label asp-for="CVV"></label><br />
                                 <input asp-for="CVV" />
                                 <span asp-validation-for="CVV"></span>
-                            </div>
-                            <div>
-                                <form asp-action="Checkout" asp-controller="Cart" method="out">
-                                    <input type="hidden" />
-                                    <button type="submit" class="btn btn-success btn-sm pull-right">Checkout</button>
-                                </form>
-                            </div>
+                            </div>                           
+                                <div class="form-group">
+                                    <input type="submit" value="Checkout" class="btn btn-dark" />
+                                </div>
                         </div>
                     </div>
                 </form>

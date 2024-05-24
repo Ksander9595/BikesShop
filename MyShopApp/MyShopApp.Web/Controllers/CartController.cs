@@ -38,7 +38,7 @@ namespace MyShopApp.Web.Controllers
                         Date = DateTime.Now,
                     };
                     await cartService.MakeCartAsync(cartDTO);
-                    return View("CartSuccessfully");
+                    return RedirectToAction("UserPage", "Users");
                 }
                 catch (ValidationException ex)
                 {
@@ -57,10 +57,10 @@ namespace MyShopApp.Web.Controllers
             CartDTO cartDTO = await cartService.GetCartAsync(Id);
             if (cartDTO == null)
                 return NotFound();
-            return View(cartDTO);
+            return View(new CheckoutViewModel { CardId = Id});
         }
         [HttpPost]
-        public async Task<IActionResult> Checkout(CheckoutViewModel model, CartDTO cartDTO)
+        public async Task<IActionResult> Checkout(CheckoutViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -69,10 +69,10 @@ namespace MyShopApp.Web.Controllers
                     NumberCart = model.NumberCart,
                     Validity = model.Validity,
                     CVV = model.CVV,
-                    CartId = cartDTO.Id,                   
+                    CartId = model.CardId,                   
                 };
                 await orderService.MakeOrderAsync(orderDTO);
-                return RedirectToAction("UserPage");
+                return RedirectToAction("UserPage", "Users");
             }
             return View(model);
             

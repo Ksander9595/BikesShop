@@ -9,7 +9,6 @@ namespace MyShopApp.DAL.EF.Entities
         public DateOnly DateOfBirth { get; set; }
         public string? Address { get; set; }
         public string? Zip { get; set; }  
-        public Order? order { get; set; }
         public ClientProfile? ClientProfile { get; set; }        
         public Cart? Cart { get; set; }
         

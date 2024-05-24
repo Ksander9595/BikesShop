@@ -18,28 +18,44 @@ namespace MyShopApp.Web.Controllers
         }        
         public async Task<IActionResult> UserPage()
         {
-            var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value;           
             var user = await userService.GetUserIdAsync(Int32.Parse(userId));
-            var cartDTO = await cartService.GetCartAsync(user.CartId);
-
-            var cartLineView = new List<CartLineViewModel>();
-            foreach (var cart in cartDTO.CartsLine)
+            if (user != null)
             {
-                var cartView = new CartLineViewModel
-                {                    
-                    MotorcycleName = cart.MotorcycleName,
-                    MotorcycleModel = cart.MotorcycleModel,
-                    Quantity = cart.Quantity
-                };
-                cartLineView.Add(cartView);
+                var cartDTO = await cartService.GetCartAsync(user.CartId);
+                if (cartDTO.Id != 0)
+                {
+                    var cartLineView = new List<CartLineViewModel>();
+                    foreach (var cart in cartDTO.CartsLine)
+                    {
+                        var cartView = new CartLineViewModel
+                        {
+                            MotorcycleName = cart.MotorcycleName,
+                            MotorcycleModel = cart.MotorcycleModel,
+                            Price = cart.Price,
+                            Quantity = cart.Quantity
+                        };
+                        cartLineView.Add(cartView);
+                    }
+                    var cartViewModel = new CartViewModel
+                    {
+                        Id = cartDTO.Id,
+                        Date = cartDTO.Date,
+                        Sum = cartDTO.Sum,
+                        cartLineViewModels = cartLineView
+                    };
+                    return View(cartViewModel);
+                }
+                else
+                {
+                    return View(new CartViewModel { Id = 0 });
+                }
             }
-            var cartViewModel = new CartViewModel
+            else
             {
-                Id = cartDTO.Id,
-                Date = cartDTO.Date,
-                cartLineViewModels = cartLineView,
-            };
-            return View(cartViewModel);
+                await userService.SignOutAsync();
+                return RedirectToAction("Login", "Account");
+            }
         }    
         public IActionResult UserList() => View(userService.GetUsers());
 

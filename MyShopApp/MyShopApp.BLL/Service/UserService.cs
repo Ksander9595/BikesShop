@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MyShopApp.BLL.Service
 {
-    public class UserService : IUserService //GetUsers and GetUsersRoleAsync
+    public class UserService : IUserService 
     {
         IUnitOfWork Database;
         
@@ -22,14 +22,20 @@ namespace MyShopApp.BLL.Service
         public async Task<UserDTO> GetUserIdAsync(int Id)
         {
             User? user = await Database.UserManager.FindByIdAsync(Id.ToString());
+            if (user != null)
+            {
+                IEnumerable<Cart> carts = await Database.Carts.GetAll();//another user.Cart == null
 
-            return new UserDTO {
-                Id = user.Id,
-                Email = user.Email,
-                Name = user.Email,
-                DateOfBirth = user.DateOfBirth,  
-                CartId = user.Cart.Id
-            };                       
+                return new UserDTO
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Name = user.Email,
+                    DateOfBirth = user.DateOfBirth,
+                    CartId = user.Cart == null ? 0 : user.Cart.Id
+                };
+            }
+            else { return null; }
         }  
 
         public async Task<UserDTO> GetUserNameAsync(string Name)
